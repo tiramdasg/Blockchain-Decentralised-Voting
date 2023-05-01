@@ -1,0 +1,35 @@
+header{
+    background-color: white;
+    color: black;
+    padding: 20px;
+}
+
+nav ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav li{
+    display: inline-block;
+    margin-right: 20px;
+}
+
+nav li:last-child{
+    margin-right: 0;
+}
+
+nav a{
+    color: black;
+    text-decoration: wavy;
+    font-size: large;
+    margin-top: 85% !important;
+}
+
+nav a:hover{
+    text-decoration: underline;
+}
+
+nav img{
+    margin-top: -3%;
+}

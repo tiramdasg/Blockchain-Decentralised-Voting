@@ -1,0 +1,21 @@
+div{
+    margin-bottom: 5%;
+}
+
+form{
+    width: max-content;
+    align-items: center;
+    padding: 5%;
+}
+
+button{
+    color: white;
+    background-color: #068d9d;
+}
+
+button:hover{
+    color: black;
+    background-color: white;
+    border-color: #068d9d;
+    border: 1px solid;
+}

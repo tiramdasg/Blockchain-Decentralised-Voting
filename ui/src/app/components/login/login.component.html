@@ -1,0 +1,41 @@
+<div class="list-inline text-center">
+    <button type="button" (click)="makeLogin()" class="btn list-inline-item">Login</button>
+    <button type="button" (click)="makeRegister()" class="btn list-inline-item">Register</button>
+</div>
+
+<!-- Login Form -->
+<form #loginForm="ngForm" ngSubmit="onLogin()" *ngIf="loginbool">
+    <h2 class="display-2">Login</h2>
+    <div class="form-group">
+        <label for="loginid">Email ID</label>
+        <input type="text" class="form-control" id="loginid" name="loginid" placeholder="Enter Voter ID" ngModel
+            required>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" ngModel
+            required>
+    </div>
+    <button type="submit" class="btn">Login</button>
+</form>
+
+<!-- Register Form -->
+<form #registerForm="ngForm" (ngSubmit)="onRegister()" *ngIf="registerbool">
+    <h2 class="display-2">Register</h2>
+    <div class="form-group">
+        <label for="name">Name [Last, First]</label>
+        <input type="text" id="nameRegister" name="nameRegister" class="form-control"
+            placeholder="Last name, First name" ngModel required>
+    </div>
+    <div class="form-group">
+        <label for="registerID">Email ID</label>
+        <input type="text" class="form-control" id="registerID" name="registerID" placeholder="Enter Voter ID" ngModel
+            required>
+    </div>
+    <div class="form-group">
+        <label for="registerPass">Password</label>
+        <input type="password" class="form-control" id="registerPass" name="registerPass" placeholder="Enter password"
+            ngModel required>
+    </div>
+    <button type="submit" class="btn">Register</button>
+</form>
