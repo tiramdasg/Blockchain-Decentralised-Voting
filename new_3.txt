@@ -1,0 +1,339 @@
+pragma solidity ^0.8.0;
+
+contract Voting {
+    struct Candidate {
+        string name;
+        uint voteCount;
+    }
+
+    Candidate[] public candidates;
+    mapping(address => bool) public voters;
+
+    function addCandidate(string memory _name) public {
+        candidates.push(Candidate(_name, 0));
+    }
+
+    function vote(uint _candidateIndex) public {
+        require(!voters[msg.sender], "You have already voted.");
+
+        candidates[_candidateIndex].voteCount += 1;
+        voters[msg.sender] = true;
+    }
+
+    function getCandidateCount() public view returns (uint) {
+        return candidates.length;
+    }
+
+    function getCandidate(uint _index) public view returns (string memory, uint) {
+        return (candidates[_index].name, candidates[_index].voteCount);
+    }
+}
+
+struct Candidate {
+  string name;
+  uint voteCount;
+}
+mapping(uint => Candidate) public candidates;
+mapping(address => bool) public voters;
+function addCandidate(string memory name) public onlyOwner {
+  candidates[candidateCount] = Candidate(name, 0);
+  candidateCount++;
+}
+function startVoting() public onlyOwner {
+  votingStarted = true;
+}
+function stopVoting() public onlyOwner {
+  votingStarted = false;
+}
+function vote(uint candidateId) public {
+  require(voters[msg.sender] == false);
+  require(votingStarted == true);
+  require(candidateId >= 0 && candidateId < candidateCount);
+  candidates[candidateId].voteCount++;
+  voters[msg.sender] = true;
+}
+function getStatistics() public view onlyOwner returns (uint[] memory, string[] memory, uint[] memory) {
+  uint[] memory candidateIds = new uint[](candidateCount);
+  string[] memory candidateNames = new string[](candidateCount);
+  uint[] memory voteCounts = new uint[](candidateCount);
+  for (uint i = 0; i < candidateCount; i++) {
+    candidateIds[i] = i;
+    candidateNames[i] = candidates[i].name;
+    voteCounts[i] = candidates[i].voteCount;
+  }
+  return (candidateIds, candidateNames, voteCounts);
+}
+
+
+
+Truffle 
+
+const Voting = artifacts.require("Voting");
+
+module.exports = function (deployer) {
+  deployer.deploy(Voting);
+};
+
+Backend
+const express = require('express');
+const app = express();
+const Web3 = require('web3');
+const abi = require('./Voting.json').abi;
+const contractAddress = '0x...'; // Replace with your contract address
+const privateKey = '0x...'; // Replace with your private key
+
+const web3 = new Web3('http://localhost:8545');
+const contract = new web3.eth.Contract(abi, contractAddress);
+
+app.post('/register', (req, res) => {
+  const { name } = req.body;
+  // TODO: Register candidate in smart contract
+  res.send('Candidate registered successfully');
+});
+
+app.post('/vote', (req, res) => {
+  const { candidateIndex } = req.body;
+  const account = web3.eth.accounts.privateKeyToAccount(privateKey);
+  web3.eth.accounts.wallet.add(account);
+  web3.eth.defaultAccount = account.address;
+
+  // TODO: Submit vote to smart contract
+  res.send('Vote submitted successfully');
+});
+
+app.listen(3000, () => {
+  console.log('Backend server listening on port 3000');
+});
+
+Frontend
+// Connect to the blockchain using web3.js
+const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+
+// Get the contract instance
+const contractAbi = /* insert the ABI for your contract */;
+const contractAddress = /* insert the address of your contract */;
+const contract = new web3.eth.Contract(contractAbi, contractAddress);
+
+// Example function to call the contract method
+async function castVote(candidateId, walletAddress, privateKey) {
+  const nonce = await web3.eth.getTransactionCount(walletAddress);
+  const gasPrice = await web3.eth.getGasPrice();
+  const gasLimit = 300000; // adjust as needed
+
+  const encodedAbi = contract.methods.castVote(candidateId).encodeABI();
+  const tx = {
+    from: walletAddress,
+    to: contractAddress,
+    nonce: nonce,
+    gasPrice: gasPrice,
+    gasLimit: gasLimit,
+    data: encodedAbi
+  };
+  const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
+  const txReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+  console.log(txReceipt);
+}
+
+// Example function to read data from the contract
+async function getVoteCount(candidateId) {
+  const voteCount = await contract.methods.getVoteCount(candidateId).call();
+  console.log(voteCount);
+}
+Interaction with smart contract
+const Web3 = require('web3');
+const contractABI = require('./contractABI.json');
+
+const provider = new Web3.providers.HttpProvider('http://localhost:8545'); // specify the provider for web3
+const web3 = new Web3(provider); // create a new web3 instance with the specified provider
+
+const contractAddress = '0x1234567890123456789012345678901234567890'; // replace with the address of your deployed contract
+const contract = new web3.eth.Contract(contractABI, contractAddress); // create a new instance of the contract object with the ABI and address
+
+// example function to call a method on the contract
+async function getNumVotes(candidate) {
+  const numVotes = await contract.methods.getNumVotes(candidate).call(); // call the 'getNumVotes' method on the contract
+  return numVotes;
+}
+
+// example function to send a transaction to the contract
+async function vote(candidate) {
+  const accounts = await web3.eth.getAccounts(); // get the list of accounts
+  const sender = accounts[0]; // select the first account as the sender
+  const gasPrice = await web3.eth.getGasPrice(); // get the current gas price
+  const gasLimit = 300000; // specify the gas limit for the transaction
+  const tx = await contract.methods.vote(candidate).send({ from: sender, gasPrice, gasLimit }); // send a transaction to the 'vote' method on the contract
+  return tx;
+}
+
+Docker
+# Use an official Node.js runtime as a parent image
+FROM node:10
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
+
+# Install any dependencies
+RUN npm install
+
+# Copy the rest of the application code to the working directory
+COPY . .
+
+# Set the environment variable for the application
+ENV PORT 3000
+
+# Expose port 3000
+EXPOSE 3000
+
+# Run the application
+CMD [ "npm", "start" ]
+
+Docker image
+docker build -t myapp .
+
+Docker runtime
+docker run -p 3000:3000 --name myapp-container -d myapp
+
+php 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voting System</title>
+</head>
+<body>
+    <h1>Vote for your favorite candidate:</h1>
+    <form>
+        <input type="radio" name="candidate" value="1"> Candidate 1<br>
+        <input type="radio" name="candidate" value="2"> Candidate 2<br>
+        <input type="radio" name="candidate" value="3"> Candidate 3<br>
+        <input type="submit" value="Vote">
+    </form>
+</body>
+</html>
+
+
+ADmin interface
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Decentralized Voting System - Admin Interface</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<header>
+		<h1>Decentralized Voting System - Admin Interface</h1>
+	</header>
+	<main>
+		<h2>Create New Election</h2>
+		<form>
+			<label for="electionName">Election Name:</label>
+			<input type="text" id="electionName" name="electionName"><br>
+
+			<label for="candidates">Candidates:</label>
+			<textarea id="candidates" name="candidates"></textarea><br>
+
+			<button type="submit">Create Election</button>
+		</form>
+		<hr>
+		<h2>Start/Stop Election</h2>
+		<form>
+			<label for="electionSelect">Select Election:</label>
+			<select id="electionSelect" name="electionSelect">
+				<option value="election1">Election 1</option>
+				<option value="election2">Election 2</option>
+			</select><br>
+
+			<label for="electionAction">Action:</label>
+			<select id="electionAction" name="electionAction">
+				<option value="start">Start Election</option>
+				<option value="stop">Stop Election</option>
+			</select><br>
+
+			<button type="submit">Submit</button>
+		</form>
+		<hr>
+		<h2>View Election Results</h2>
+		<form>
+			<label for="resultSelect">Select Election:</label>
+			<select id="resultSelect" name="resultSelect">
+				<option value="election1">Election 1</option>
+				<option value="election2">Election 2</option>
+			</select><br>
+
+			<button type="submit">View Results</button>
+		</form>
+	</main>
+</body>
+</html>
+
+User interface
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Decentralized Voting System - User Interface</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<header>
+		<h1>Decentralized Voting System - User Interface</h1>
+	</header>
+	<main>
+		<h2>Authenticate</h2>
+		<form>
+			<label for="voterId">Voter ID:</label>
+			<input type="text" id="voterId" name="voterId"><br>
+
+			<label for="oneTimePassword">One-Time Password:</label>
+			<input type="text" id="oneTimePassword" name="oneTimePassword"><br>
+
+			<button type="submit">Authenticate</button>
+		</form>
+		<hr>
+		<h2>Vote</h2>
+		<form>
+			<label for="electionSelect">Select Election:</label>
+			<select id="electionSelect" name="electionSelect">
+				<option value="election1">Election 1</option>
+				<option value="election2">Election 2</option>
+			</select><br>
+
+		
+Authentication
+
+const { createHash } = require('crypto');
+const { Nexmo } = require('nexmo');
+
+const nexmo = new Nexmo({
+  apiKey: 'your_api_key',
+  apiSecret: 'your_api_secret',
+});
+
+// Generate one-time password
+function generateOTP() {
+  const secret = 'your_secret_key';
+  const hash = createHash('sha256').update(secret).digest('hex');
+  const otp = Math.floor(parseInt(hash.substring(0, 6), 16) / 1000000);
+  return otp;
+}
+
+// Send one-time password via SMS
+function sendOTP(phoneNumber, otp) {
+  const from = 'Blockchain Voting';
+  const to = phoneNumber;
+  const text = `Your one-time password for voting is ${otp}.`;
+  nexmo.message.sendSms(from, to, text);
+}
+
+// Verify one-time password
+function verifyOTP(enteredOTP, expectedOTP) {
+  return enteredOTP === expectedOTP;
+}
+https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn/related
+chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#onboarding/welcome
+
