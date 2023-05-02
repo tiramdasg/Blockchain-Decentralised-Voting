@@ -1,0 +1,117 @@
+<ngb-alert #selfClosing [dismissible]="false" type='custom' *ngIf="loginsuccess">
+    <strong>Login success!</strong>
+</ngb-alert>
+
+<div class="list-inline text-center">
+    <button type="button" (click)="makeLogin()" class="btn list-inline-item">Login</button>
+    <button type="button" (click)="makeRegister()" class="btn list-inline-item">Register</button>
+</div>
+<div class="row g-0">
+    <div class="d-none d-md-flex col-md-5 col-lg-4"></div>
+    <div class="col-md-8 col-lg-8">
+        <div class="login d-flex align-items-center py-5">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-md-5 col-lg-5">
+                        <!-- Login Form -->
+                        <form [formGroup]="loginForm" (ngSubmit)="onLogin()" *ngIf="loginbool">
+                            <h2 class="display-4">Login</h2>
+
+                            <div class="form-floating mb-3">
+                                <input matInput type="text" class="form-control" id="inputloginid"
+                                    placeholder="Voter ID" formControlName="loginId">
+                                <mat-error class="error-message" *ngIf="loginForm.get('loginId')?.invalid">
+                                    This field is required!
+                                </mat-error>
+                                <label for="floatingInput">Login ID</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input matInput type="password" class="form-control" id="inputpassword"
+                                    placeholder="Password" formControlName="password">
+                                <mat-error class="error-message"
+                                    *ngIf="loginForm.get('password')?.errors?.['required']">
+                                    This field is required!
+                                </mat-error>
+                                <mat-error class="error-message"
+                                    *ngIf="loginForm.get('password')?.errors?.['minlength']">
+                                    Password must be at least 8 characters!
+                                </mat-error>
+                                <label for="floatingPassword">Password</label>
+                            </div>
+
+                            <div class="d-grid">
+                                <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" type="submit"
+                                    [disabled]="loginForm.invalid">Login</button>
+                                <!-- <div class="text-center">
+            <a class="small" href="#">Forgot password?</a>
+        </div> -->
+                            </div>
+
+                        </form>
+
+                        <!-- Register Form -->
+                        <form [formGroup]="registerForm" (ngSubmit)="onRegister()" *ngIf="registerbool">
+                            <h2 class="display-4">Register</h2>
+
+                            <div class="form-floating mb-3">
+                                <input matInput type="text" class="form-control" id="inputname"
+                                    placeholder="Last Name, First Name" formControlName="name">
+                                <mat-error class="error-message" *ngIf="registerForm.get('name')?.invalid">
+                                    This field is text and only ',' is allowed.
+                                </mat-error>
+                                <label for="floatingInput">Name [Last, First]</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input matInput type="text" class="form-control" id="inputuserid"
+                                    placeholder="Use Voter ID as User ID" formControlName="userid" class="form-control">
+                                <mat-error class="error-message" *ngIf="registerForm.get('userid')?.invalid">
+                                    This field is required!
+                                </mat-error>
+                                <label for="floatingInput">Login ID</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input matInput type="email" class="form-control" id="inputemail"
+                                    placeholder="example@xxx.com" formControlName="email">
+                                <mat-error class="error-message"
+                                    *ngIf="registerForm.get('email')?.errors?.['required']">
+                                    This field is required!
+                                </mat-error>
+                                <mat-error class="error-message" *ngIf="registerForm.get('email')?.errors?.['email']">
+                                    Invalid Format!
+                                </mat-error>
+                                <label for="floatingInput">Email</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input matInput type="password" class="form-control" id="inputpassword"
+                                    placeholder="Password" formControlName="password">
+                                <mat-error class="error-message"
+                                    *ngIf="registerForm.get('password')?.errors?.['required']">
+                                    This field is required!
+                                </mat-error>
+                                <mat-error class="error-message"
+                                    *ngIf="registerForm.get('password')?.errors?.['minlength']">
+                                    Password must be at least 8 characters!
+                                </mat-error>
+                                <label for="floatingPassword">Password</label>
+                            </div>
+
+                            <div class="d-grid">
+                                <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" type="submit"
+                                    [disabled]="registerForm.invalid">Register</button>
+                                <!-- <div class="text-center">
+                                        <a class="small" href="#">Forgot password?</a>
+                                </div> -->
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
