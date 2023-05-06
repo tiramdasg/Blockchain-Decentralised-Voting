@@ -1,1 +1,49 @@
-<p>vote works!</p>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-12 col-lg-12">
+
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="candidateName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                            Candidate Name
+                        </th>
+                        <td mat-cell *matCellDef="let element"> {{element.candidateName}} </td>
+                    </ng-container>
+
+                    <!-- Party Column -->
+                    <ng-container matColumnDef="candidateParty">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by party">
+                            Candidate Party
+                        </th>
+                        <td mat-cell *matCellDef="let element"> {{element.candidateParty}} </td>
+                    </ng-container>
+
+                    <!-- Note Column -->
+                    <ng-container matColumnDef="candidateNote">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by note">
+                            Candidate Note
+                        </th>
+                        <td mat-cell *matCellDef="let element"> {{element.candidateNote}} </td>
+                    </ng-container>
+<!-- 
+                    Symbol Column
+                    <ng-container>
+                        <th mat-header-cell>
+                            Vote
+                        </th>
+                        <td mat-cell > 
+                            <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" type="submit">Vote!</button>
+                        </td>
+                    </ng-container> -->
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

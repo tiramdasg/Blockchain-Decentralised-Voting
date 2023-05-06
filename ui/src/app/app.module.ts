@@ -17,6 +17,7 @@ import { VoteComponent } from './components/vote/vote.component';
 import { AdminApproveComponent } from './components/admin-approve/admin-approve.component';
 import { AdminSetCampaignComponent } from './components/admin-set-campaign/admin-set-campaign.component';
 import { AdminGetResultsComponent } from './components/admin-get-results/admin-get-results.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { AdminGetResultsComponent } from './components/admin-get-results/admin-g
     MatCardModule,
     MatSnackBarModule,
     NgbModule,
+    MatTableModule,
   ],
   providers: [
   ],

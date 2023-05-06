@@ -2,6 +2,10 @@
     <strong>Login success!</strong>
 </ngb-alert>
 
+<ngb-alert #selfClosing [dismissible]="false" type='custom' *ngIf="registersuccess">
+    <strong>Registration Done! Please wait for account approval!!</strong>
+</ngb-alert>
+
 <div class="list-inline text-center">
     <button type="button" (click)="makeLogin()" class="btn list-inline-item">Login</button>
     <button type="button" (click)="makeRegister()" class="btn list-inline-item">Register</button>
@@ -44,8 +48,8 @@
                                 <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" type="submit"
                                     [disabled]="loginForm.invalid">Login</button>
                                 <!-- <div class="text-center">
-            <a class="small" href="#">Forgot password?</a>
-        </div> -->
+                                        <a class="small" href="#">Forgot password?</a>
+                                    </div> -->
                             </div>
 
                         </form>

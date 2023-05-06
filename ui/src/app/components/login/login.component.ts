@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { NgbAlert, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +11,7 @@ import { NgbAlert, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
       :host .alert-custom {
         color: darkgreen;
         background-color: #a5b452;
+        width: 80%;
       }
   `, ]
 })
@@ -26,7 +27,7 @@ export class LoginComponent {
 
   @ViewChild('selfClosing', { static: false }) selfClosing!: NgbAlert;
 
-  constructor(private fb: FormBuilder, private sb: MatSnackBar) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
       loginId: [
         '',
@@ -64,15 +65,6 @@ export class LoginComponent {
     });
   }
 
-  // openmessage(message: string, classname: string) {
-  //   const configsb = new MatSnackBarConfig();
-  //   configsb.duration = 5000;
-  //   configsb.verticalPosition = 'top';
-  //   configsb.horizontalPosition = 'end';
-  //   configsb.panelClass = [classname];
-  //   this.sb.open(message, '', configsb);
-  // }
-
   makeLogin() {
     this.loginbool = true;
     this.registerbool = false;
@@ -86,24 +78,22 @@ export class LoginComponent {
   }
 
   onLogin() {
-    // code
     if(this.loginForm.get('loginId')?.value == 'user'){
       sessionStorage.setItem('role', 'user');
+      this.router.navigate(['/vote']);
     }else if(this.loginForm.get('loginId')?.value == 'admin'){
-      sessionStorage.setItem('role', 'admin')
-      // to get var = sessionStorage.getItem('role')
+      sessionStorage.setItem('role', 'admin');
+      this.router.navigate(['/admin-set-campaign']);
     }
     this.loginForm?.reset();
     this.loginsuccess = true;
     setTimeout(() => this.selfClosing.close(), 4000);
-    // this.openmessage('Logged in!!', "success-message");
   }
 
   onRegister() {
-    // code
     this.registerForm?.reset();
     this.registersuccess = true;
+    sessionStorage.setItem('role', 'waiting')
     setTimeout(() => this.selfClosing.close(), 4000);
-    // this.openmessage("Registration Done! Please wait for account approval!", "success-message");
   }
 }
