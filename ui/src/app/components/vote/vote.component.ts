@@ -1,8 +1,7 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { NONE_TYPE } from '@angular/compiler';
-import { OnDestroy, Component, ViewChild, AfterViewInit } from '@angular/core';
-import { MatSort, Sort } from '@angular/material/sort';
+import { OnDestroy, Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+// import  vote  from 'D:/TUHH_ICS/Sem3_SS23/Advanced Internet Computing/PBL/UI-test/voteweb3.js'
+import { MyComponent } from './vote.web3';
 
 export interface CandidateInfo {
   candidateName: string;
@@ -31,7 +30,7 @@ const CANDIDATE_LIST: CandidateInfo[] = [
   selector: 'app-vote',
   templateUrl: './vote.component.html',
   styleUrls: ['./vote.component.scss'],
-  providers: [MatSort]
+  providers: []
 })
 export class VoteComponent implements OnDestroy{
   displayedColumns: string[] = ['candidateName', 'candidateParty', 'candidateNote'];
@@ -46,6 +45,11 @@ export class VoteComponent implements OnDestroy{
 
   reset(){
     this.selectedCandidate = new Set();
+  }
+
+  web3 = new MyComponent()
+  castVote(){
+    console.log(this.web3.vote());
   }
 
   ngOnDestroy(){

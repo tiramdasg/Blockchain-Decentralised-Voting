@@ -41,7 +41,7 @@
                     <p>You have selected <span style="font-weight: bold;">{{sc.candidateName}}</span>, from <span style="font-weight: bold;">{{sc.candidateParty}}</span>
                          with a motto <span style="font-style: italic;">"{{sc.candidateNote}}"</span>. Do you want to cast your vote for this candidate?</p>
                     <div class="list-inline text-center">
-                        <button mat-raised-button class="btn btn-md fw-bold mb-2 list-inline-item yes-vote" type="submit">Yes, Vote!</button>
+                        <button mat-raised-button class="btn btn-md fw-bold mb-2 list-inline-item yes-vote" type="submit" (click)="castVote()">Yes, Vote!</button>
                         <button mat-raised-button class="btn btn-md fw-bold mb-2 list-inline-item no-vote" type="submit" (click)="reset()">No!</button>
                     </div>
                 </div>
