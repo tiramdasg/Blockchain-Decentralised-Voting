@@ -18,6 +18,8 @@ import { AdminApproveComponent } from './components/admin-approve/admin-approve.
 import { AdminSetCampaignComponent } from './components/admin-set-campaign/admin-set-campaign.component';
 import { AdminGetResultsComponent } from './components/admin-get-results/admin-get-results.component';
 import { MatTableModule } from '@angular/material/table';
+import {MatChipsModule} from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import { MatTableModule } from '@angular/material/table';
     MatSnackBarModule,
     NgbModule,
     MatTableModule,
+    MatChipsModule,
+    MatIconModule,
   ],
   providers: [
   ],

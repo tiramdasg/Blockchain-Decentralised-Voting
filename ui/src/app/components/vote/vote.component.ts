@@ -1,4 +1,5 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { NONE_TYPE } from '@angular/compiler';
 import { OnDestroy, Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -32,27 +33,19 @@ const CANDIDATE_LIST: CandidateInfo[] = [
   styleUrls: ['./vote.component.scss'],
   providers: [MatSort]
 })
-export class VoteComponent implements AfterViewInit, OnDestroy{
+export class VoteComponent implements OnDestroy{
   displayedColumns: string[] = ['candidateName', 'candidateParty', 'candidateNote'];
   dataSource = new MatTableDataSource<CandidateInfo>(CANDIDATE_LIST);
 
-  constructor(private _liveAnnouncer: LiveAnnouncer) {}
+  selectedCandidate: Set<CandidateInfo> = new Set();
 
-  @ViewChild(MatSort) sort!: MatSort;
-
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
+  selectCandidate(row: any){
+    this.selectedCandidate = new Set();
+    this.selectedCandidate.add(row)
   }
 
-  sortState!: Sort;
-  //  Announce the change in sort state 
-  announceSortChange($event: any) {
-    this.sortState = $event as Sort;
-    if (this.sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${this.sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
-    }
+  reset(){
+    this.selectedCandidate = new Set();
   }
 
   ngOnDestroy(){
