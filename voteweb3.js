@@ -72,6 +72,5 @@ web3.eth.defaultAccount = '0xF9424A59Eee9E85977e7808Aa173d21903Be88c1'; // set t
 addCandidate('John Doe', 'Independent');
 startVoting();
 vote(1);
-vote(1)
 endVoting()
 
