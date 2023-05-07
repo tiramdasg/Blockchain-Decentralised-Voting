@@ -53,7 +53,6 @@ async function vote(candidateId) {
     return;
   }
   else {
-    console.log('You have not already voted!');
     const tx = await contract.methods.vote(candidateId).send({ from: account });
     console.log('Transaction hash:', tx.transactionHash);
 
