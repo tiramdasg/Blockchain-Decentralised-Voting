@@ -16,7 +16,6 @@ async function getCandidateCount() {
 async function addCandidate(name, party) {
   const tx = await contract.methods.addCandidate(name, party).send({ from: web3.eth.defaultAccount });
   console.log('Transaction hash:', tx.transactionHash);
-  console.log("Name:", name)
 }
 
 async function startVoting() {
@@ -29,23 +28,11 @@ async function endVoting() {
   console.log('Transaction hash:', tx.transactionHash);
 }
 
-// async function vote(candidateId) {
-//   const tx = await contract.methods.vote(candidateId).send({ from: web3.eth.defaultAccount });
-//   console.log(tx);
-//   console.log('Transaction hash:', tx.transactionHash);
 
-//     // Wait for transaction receipt to be available
-//   const receipt = await web3.eth.getTransactionReceipt(tx.transactionHash);
-//   console.log("Default account: ", web3.eth.defaultAccount);
-
-//     // Check if the user's voted status has been updated
-  
-//   const votedStatus = await contract.methods.users(web3.eth.defaultAccount).call().voted;
-//   //return votedStatus;
-// }
 let hasVoted = {};
-
-async function vote(candidateId) {
+async function vote(candidateId, voterAddress) {
+  // Set the account to vote from
+  web3.eth.defaultAccount = voterAddress;
   const account = web3.eth.defaultAccount;
 
   if (hasVoted[account]) {
@@ -53,7 +40,7 @@ async function vote(candidateId) {
     return;
   }
   else {
-    const tx = await contract.methods.vote(candidateId).send({ from: account });
+    const tx = await contract.methods.vote(candidateId, voterAddress).send({ from: web3.eth.defaultAccount });
     console.log('Transaction hash:', tx.transactionHash);
 
     hasVoted[account] = true;
@@ -70,6 +57,6 @@ web3.eth.defaultAccount = '0xF9424A59Eee9E85977e7808Aa173d21903Be88c1'; // set t
 
 addCandidate('John Doe', 'Independent');
 startVoting();
-vote(1);
-endVoting()
+vote(1,'0xF9424A59Eee9E85977e7808Aa173d21903Be88c1');
+endVoting();
 
