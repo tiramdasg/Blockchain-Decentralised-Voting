@@ -7,7 +7,7 @@ import Web3 from 'web3';
 const contractJson = require('../../../../../build/contracts/Voting.json');
 const contractAbi = contractJson.abi;
 
-export class MyComponent {
+export class VoteWeb3Component {
   private providerUrl = 'HTTP://127.0.0.1:7545';
   private contractAddress = '0x19d715da617b8cd641eaa8e0690965576921C735';
   private web3: Web3;
@@ -20,7 +20,7 @@ export class MyComponent {
       this.contractAddress
     );
   }
-  public async vote() {
+  async vote() {
     const candidateId = 1;
     const tx = await this.contract.methods
       .vote(candidateId)

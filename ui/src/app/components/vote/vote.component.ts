@@ -1,7 +1,7 @@
 import { OnDestroy, Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 // import  vote  from 'D:/TUHH_ICS/Sem3_SS23/Advanced Internet Computing/PBL/UI-test/voteweb3.js'
-import { MyComponent } from './vote.web3';
+import { VoteWeb3Component } from './vote.web3';
 
 export interface CandidateInfo {
   candidateName: string;
@@ -47,7 +47,7 @@ export class VoteComponent implements OnDestroy{
     this.selectedCandidate = new Set();
   }
 
-  web3 = new MyComponent()
+  web3 = new VoteWeb3Component()
   castVote(){
     console.log(this.web3.vote());
   }
