@@ -20,6 +20,7 @@ import { AdminGetResultsComponent } from './components/admin-get-results/admin-g
 import { MatTableModule } from '@angular/material/table';
 import {MatChipsModule} from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatTableModule,
     MatChipsModule,
     MatIconModule,
+    HttpClientModule
   ],
   providers: [
   ],
