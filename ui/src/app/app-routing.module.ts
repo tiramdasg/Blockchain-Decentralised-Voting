@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'admin-set-campaign', component: AdminSetCampaignComponent },
   { path: '',   redirectTo: 'login-register', pathMatch: 'full' },
 ];
+// comement
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
