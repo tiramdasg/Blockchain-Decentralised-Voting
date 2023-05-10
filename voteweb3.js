@@ -1,62 +1,60 @@
 const Web3 = require('web3');
-const contractJson = require('./build/contracts/Voting.json')
+const contractJson = require('./build/contracts/Voting.json');
 const contractAbi = contractJson.abi;
-//console.log(contractAbi);
+
 const providerUrl = 'HTTP://127.0.0.1:7545';
-const contractAddress = '0x48d7c9CA7d2d973fDD3261b1aC55580288266cbC';
 const web3 = new Web3(providerUrl);
-const contract = new web3.eth.Contract(contractAbi, contractAddress);
 
+async function main() {
+  const accounts = await web3.eth.getAccounts();
+    const defaultAccount = accounts[0];
+    const accountList = accounts.slice(0, 10); // get first 10 accounts
+    console.log(accountList)
 
-async function getCandidateCount() {
-  const candidateCount = await contract.methods.candidateCount().call();
-  console.log('Candidate Count:', candidateCount);
-}
+  const defaultAccoun = await web3.eth.accounts.create();
+  //const defaultAccount = defaultAccoun.address
+  console.log('New account created:', defaultAccount);
 
-async function addCandidate(name, party) {
-  const tx = await contract.methods.addCandidate(name, party).send({ from: web3.eth.defaultAccount });
-  console.log('Transaction hash:', tx.transactionHash);
-}
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = contractJson.networks[networkId];
+  const contractAddress = deployedNetwork.address;
+  //const privateKey = await web3.eth.getPrivateKey(contractAddress);
+  //console.log(privateKey);
+  const { ethers } = require('ethers');
 
-async function startVoting() {
-  const tx = await contract.methods.startVoting().send({ from: web3.eth.defaultAccount });
-  console.log('Transaction hash:', tx.transactionHash);
-}
+// Generate a new random wallet
+// const wallet = ethers.Wallet.createRandom();
 
-async function endVoting() {
-  const tx = await contract.methods.endVoting().send({ from: web3.eth.defaultAccount });
-  console.log('Transaction hash:', tx.transactionHash);
-}
+// // Get the address and private key
+// const address = wallet.address;
+// const privateKey = wallet.privateKey;
 
-
-let hasVoted = {};
-async function vote(candidateId, voterAddress) {
-  // Set the account to vote from
-  web3.eth.defaultAccount = voterAddress;
-  const account = web3.eth.defaultAccount;
-
-  if (hasVoted[account]) {
-    console.log('You have already voted!');
-    return;
-  }
-  else {
-    const tx = await contract.methods.vote(candidateId, voterAddress).send({ from: web3.eth.defaultAccount });
-    console.log('Transaction hash:', tx.transactionHash);
-
-    hasVoted[account] = true;
-    console.log(hasVoted)
-  }
+// console.log('Address:', address);
+// console.log(contractAddress)
+// console.log('Private Key:', privateKey);
+  const contract = new web3.eth.Contract(contractAbi, contractAddress, { from: defaultAccount });
   
+  const candidateCount = await contract.methods.candidateCount().call();
+  // console.log('Candidate Count:', candidateCount);
+
+  const tx = await contract.methods.addCandidate('John Doe', 'Independent').send({ from: web3.eth.defaultAccount, gas: '3000000' });
+  console.log('Transaction hash:', tx.transactionHash);
+
+  const startTx = await contract.methods.startVoting().send({ from: defaultAccount });
+  console.log('Start voting transaction hash:', startTx.transactionHash);
+
+
+  const address1 = '0x0Bf7E7CED17Dc69e24ca620ce1954f03580A556D'; // provided address from backend
+  if (accounts.includes(address1)) {
+    const voteTx = await contract.methods.vote(1).send({ from: address1 });
+    console.log('Vote transaction hash:', voteTx.transactionHash);
+  } else {
+    console.log('Invalid address');
+  }
+
+  const endTx = await contract.methods.endVoting().send({ from: defaultAccount });
+  console.log('End voting transaction hash:', endTx.transactionHash);
+
 }
 
-contract.events.userVoted().on('data', event => {
-  console.log('User voted:', event.returnValues);
-});
-
-web3.eth.defaultAccount = '0xF9424A59Eee9E85977e7808Aa173d21903Be88c1'; // set the default account for transactions
-
-addCandidate('John Doe', 'Independent');
-startVoting();
-vote(1,'0xF9424A59Eee9E85977e7808Aa173d21903Be88c1');
-endVoting();
-
+main();
