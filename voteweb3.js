@@ -44,7 +44,7 @@ async function main() {
   console.log('Start voting transaction hash:', startTx.transactionHash);
 
 
-  const address1 = '0x0Bf7E7CED17Dc69e24ca620ce1954f03580A556D'; // provided address from backend
+  const address1 = '0x6cEB81e23D780520649C96d207bBABA8935fD366'; // provided address from backend
   if (accounts.includes(address1)) {
     const voteTx = await contract.methods.vote(1).send({ from: address1 });
     console.log('Vote transaction hash:', voteTx.transactionHash);
