@@ -32,7 +32,7 @@ contract Voting {
 
     event candidateAdded(uint id,string name,string party,uint voteCount);
 
-    function addCandidate(string memory _name,string memory _party) public Admin{
+    function addCandidate(string memory _name,string memory _party) public {
         incrementCount();
         candidatesInfo[candidateCount] = Candidate({id:candidateCount, name: _name,party : _party, voteCount: 0 });
         emit candidateAdded(candidateCount, _name, _party, 0);    
@@ -41,10 +41,10 @@ contract Voting {
     function incrementCount() internal{
         candidateCount +=1;
     }
-    function startVoting() public Admin {
+    function startVoting() public {
         startVote = true;
     }
-    function endVoting() public Admin {
+    function endVoting() public {
         endVote = false;
     }
 

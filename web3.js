@@ -1,0 +1,104 @@
+const Web3 = require('web3');
+const contractJson = require('./build/contracts/Voting.json');
+const contractAbi = contractJson.abi;
+const adminAddress = "0x4F2877fE639174F97ed615e417316a02512FDB25";
+const providerUrl = 'HTTP://127.0.0.1:7545';
+const web3 = new Web3(providerUrl);
+
+async function getAccountList() {
+  const accounts = await web3.eth.getAccounts();
+  return accounts.slice(0, 10); // get first 10 accounts
+}
+
+async function getCandidateCount() {
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = contractJson.networks[networkId];
+  const contractAddress = deployedNetwork.address;
+
+  const contract = new web3.eth.Contract(contractAbi, contractAddress);
+
+  const candidateCount = await contract.methods.candidateCount().call();
+  return candidateCount;
+}
+
+async function addCandidate(name, party) {
+  const accounts = await web3.eth.getAccounts();
+  const defaultAccount = accounts[0];
+
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = contractJson.networks[networkId];
+  const contractAddress = deployedNetwork.address;
+
+  const contract = new web3.eth.Contract(contractAbi, contractAddress, { from: defaultAccount });
+
+  const tx = await contract.methods.addCandidate(name, party).send({ from: defaultAccount, gas: '3000000' });
+  return tx.transactionHash;
+}
+
+async function startVoting() {
+  const accounts = await web3.eth.getAccounts();
+  const defaultAccount = accounts[0];
+
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = contractJson.networks[networkId];
+  const contractAddress = deployedNetwork.address;
+
+  const contract = new web3.eth.Contract(contractAbi, contractAddress, { from: defaultAccount });
+
+  const startTx = await contract.methods.startVoting().send({ from: defaultAccount });
+  return startTx.transactionHash;
+}
+
+async function vote(candidateIndex, accountIndex) {
+  const accounts = await web3.eth.getAccounts();
+  const defaultAccount = accounts[0];
+
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = contractJson.networks[networkId];
+  const contractAddress = deployedNetwork.address;
+
+  const contract = new web3.eth.Contract(contractAbi, contractAddress, { from: defaultAccount });
+
+  const accountList = await getAccountList();
+  const account = accountList[accountIndex];
+
+const address1 = '0xbab00e533bD4fb0B60BCE2F9871a8E05ADb81895'; // provided address from backend
+if (accounts.includes(address1)) {
+const account = web3.eth.accounts.create();
+  console.log(account);
+  
+  // add the account to the wallet
+  web3.eth.accounts.wallet.add(account.privateKey);
+  // create a transaction
+  const transaction = {
+    to: defaultAccount,
+    value: '1000000000000000',
+    gas: 2000000
+  };
+    const voteTx = await contract.methods.vote(candidateIndex).send({ from: address1, gas: '3000000' });
+    const signedTransaction = await web3.eth.accounts.signTransaction(transaction, account.privateKey);
+
+    console.log('Vote transaction hash:', voteTx.transactionHash);
+  } else {
+    console.log('Invalid address');
+  }
+
+}
+
+async function endVoting() {
+  const accounts = await web3.eth.getAccounts();
+  const defaultAccount = accounts[0];
+
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = contractJson.networks[networkId];
+  const contractAddress = deployedNetwork.address;
+
+  const contract = new web3.eth.Contract(contractAbi, contractAddress, { from: defaultAccount });
+
+  const endTx = await contract.methods.endVoting().send({ from: defaultAccount });
+  return endTx.transactionHash;
+}
+addCandidate('John Doe', 'Independent');
+startVoting()
+vote(1)
+endVoting()
