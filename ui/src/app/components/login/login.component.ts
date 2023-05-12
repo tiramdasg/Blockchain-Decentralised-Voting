@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DbnodeService } from 'src/app/dbnode.service';
@@ -8,16 +7,7 @@ import { DbnodeService } from 'src/app/dbnode.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  styles: [
-    `
-      :host .alert-custom {
-        color: darkgreen;
-        background-color: #a5b452;
-        width: 80%;
-      }
-    `,
-  ],
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
   loginbool = true;
@@ -28,8 +18,6 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     //sessionStorage.setItem('role', 'waiting');
   }
-
-  @ViewChild('selfClosing', { static: false }) selfClosing!: NgbAlert;
 
   constructor(
     private fb: FormBuilder,

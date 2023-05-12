@@ -21,6 +21,8 @@ import { MatTableModule } from '@angular/material/table';
 import {MatChipsModule} from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
+import { MatExpansionModule } from '@angular/material/expansion';
+
 
 @NgModule({
   declarations: [
@@ -47,7 +49,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatTableModule,
     MatChipsModule,
     MatIconModule,
-    HttpClientModule
+    HttpClientModule,
+    MatExpansionModule,
   ],
   providers: [
   ],
