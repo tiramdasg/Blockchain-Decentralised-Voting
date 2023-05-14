@@ -5,7 +5,7 @@ contract Voting {
     uint public candidateCount;
     bool public startVote;
     bool public endVote;
-
+    address public admin; 
     struct Candidate {
         uint id;
         string name;
@@ -23,8 +23,12 @@ contract Voting {
 
     constructor() public {
         candidateCount = 0;
+        admin = msg.sender;
     }
-    address admin; 
+    function getAdmin() public view returns (address) {
+        // Returns account address used to deploy contract (i.e. admin)
+        return admin;
+    }
     modifier Admin() {
     require(msg.sender == admin);
     _;
@@ -32,7 +36,7 @@ contract Voting {
 
     event candidateAdded(uint id,string name,string party,uint voteCount);
 
-    function addCandidate(string memory _name,string memory _party) public {
+    function addCandidate(string memory _name,string memory _party) public Admin{
         incrementCount();
         candidatesInfo[candidateCount] = Candidate({id:candidateCount, name: _name,party : _party, voteCount: 0 });
         emit candidateAdded(candidateCount, _name, _party, 0);    
@@ -41,10 +45,10 @@ contract Voting {
     function incrementCount() internal{
         candidateCount +=1;
     }
-    function startVoting() public {
+    function startVoting() public Admin {
         startVote = true;
     }
-    function endVoting() public {
+    function endVoting() public  Admin{
         endVote = false;
     }
 
@@ -54,7 +58,7 @@ contract Voting {
         require(users[msg.sender] == false);
         require(candidateId > 0 && candidateId <= candidateCount);
         require(startVote == true);
-        require(endVote == false);
+        //require(endVote == false);
         users[msg.sender] = true;
         candidatesInfo[candidateId].voteCount ++;
         emit userVoted(candidateId);
