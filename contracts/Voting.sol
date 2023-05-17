@@ -1,4 +1,5 @@
 pragma solidity ^0.5.0;
+pragma experimental ABIEncoderV2;
 
 contract Voting {
 
@@ -10,6 +11,7 @@ contract Voting {
         uint id;
         string name;
         string party;
+        string info;
         uint voteCount;
     }
     struct Users{
@@ -17,7 +19,7 @@ contract Voting {
         uint vote;
         bool voted;
     }
-
+    Candidate[] public candidates;
     mapping(uint => Candidate) public candidatesInfo;
     mapping(address => bool) public users;  
 
@@ -34,14 +36,29 @@ contract Voting {
     _;
     }
 
-    event candidateAdded(uint id,string name,string party,uint voteCount);
+    event candidateAdded(uint id,string name,string party,string info,uint voteCount);
 
-    function addCandidate(string memory _name,string memory _party) public Admin{
+    function addCandidate(string memory _name,string memory _party,string memory _info) public Admin{
         incrementCount();
-        candidatesInfo[candidateCount] = Candidate({id:candidateCount, name: _name,party : _party, voteCount: 0 });
-        emit candidateAdded(candidateCount, _name, _party, 0);    
+        candidatesInfo[candidateCount] = Candidate({id:candidateCount, name: _name,party : _party,info : _info, voteCount: 0 });
+        emit candidateAdded(candidateCount, _name, _party,_info, 0);    
+        candidates.push(Candidate(candidateCount,_name, _party,_info,0));
     }
 
+    
+    function getCandidates() public view returns (string[] memory, string[] memory,string[] memory) {
+        string[] memory candidateNames = new string[](candidates.length);
+        string[] memory candidateParties = new string[](candidates.length);
+        string[] memory candidatemessage = new string[](candidates.length);
+        
+        for (uint i = 0; i < candidates.length; i++) {
+            candidateNames[i] = candidates[i].name;
+            candidateParties[i] = candidates[i].party;
+            candidatemessage[i] = candidates[i].info;
+        }
+        
+        return (candidateNames, candidateParties,candidatemessage);
+    }
     function incrementCount() internal{
         candidateCount +=1;
     }

@@ -21,7 +21,7 @@ async function getCandidateCount() {
   return candidateCount;
 }
 
-async function addCandidate(name, party) {
+async function addCandidate(name, party,info) {
   const accounts = await web3.eth.getAccounts();
   const defaultAccount = accounts[0];
 
@@ -31,10 +31,24 @@ async function addCandidate(name, party) {
 
   const contract = new web3.eth.Contract(contractAbi, contractAddress, { from: defaultAccount });
 
-  const tx = await contract.methods.addCandidate(name, party).send({ from: defaultAccount, gas: '3000000' });
+  const tx = await contract.methods.addCandidate(name, party,info).send({ from: defaultAccount, gas: '3000000' });
   return tx.transactionHash;
-}
 
+}
+async function getCandidatesDetails() {
+  const accounts = await web3.eth.getAccounts();
+  const defaultAccount = accounts[0];
+
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = contractJson.networks[networkId];
+  const contractAddress = deployedNetwork.address;
+
+  const contract = new web3.eth.Contract(contractAbi, contractAddress);
+
+  const result = await contract.methods.getCandidates().call();
+  console.log(result)
+  return result;
+}
 async function startVoting() {
   const accounts = await web3.eth.getAccounts();
   const defaultAccount = accounts[0];
@@ -63,7 +77,6 @@ async function vote(candidateIndex, account) {
   const accountList = await getAccountList();
   const account11 = account;
   console.log(account11)
-const address1 = '0x4f9d2Fb82fC776ecDa0F550278f883112868d8C1'; // provided address from backend
 if (accounts.includes(account11)) {
 const account = web3.eth.accounts.create();
   // add the account to the wallet
@@ -98,8 +111,6 @@ async function endVoting() {
   const endTx = await contract.methods.endVoting().send({ from: defaultAccount });
   return endTx.transactionHash;
 }
-//addCandidate('Sujay Chavan', 'HAHAHAHA');
-//startVoting()
-//vote(1,"0x597195f6394f3FFdE251B5d15C96CB4b84c3b65a")
-//getAccountList()
+addCandidate('SUJAY', 'HAHAHAHA',"Message");
+getCandidatesDetails()
 module.exports = {getAccountList,addCandidate,vote};
