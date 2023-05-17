@@ -75,6 +75,8 @@ export class VoteComponent implements OnDestroy {
       },
       error: (error: any) => {
         console.log(error.error.message);
+        if(error.error.message.includes("revert"))
+        error.error.message="Already Voted";
         this.sb.open(error.error.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
