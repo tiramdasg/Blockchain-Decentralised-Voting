@@ -6,6 +6,7 @@ const web3 = new Web3(providerUrl);
 
 async function getAccountList() {
   const accounts = await web3.eth.getAccounts();
+  console.log(accounts)
   return accounts.slice(0, 10); // get first 10 accounts
 }
 
@@ -48,7 +49,8 @@ async function startVoting() {
   return startTx.transactionHash;
 }
 
-async function vote(candidateIndex, accountIndex) {
+async function vote(candidateIndex, account) {
+  console.log("The account I got is "+account)
   const accounts = await web3.eth.getAccounts();
   const defaultAccount = accounts[0];
 
@@ -59,7 +61,7 @@ async function vote(candidateIndex, accountIndex) {
   const contract = new web3.eth.Contract(contractAbi, contractAddress, { from: defaultAccount });
 
   const accountList = await getAccountList();
-  const account11 = accountList[accountIndex];
+  const account11 = account;
   console.log(account11)
 const address1 = '0x4f9d2Fb82fC776ecDa0F550278f883112868d8C1'; // provided address from backend
 if (accounts.includes(account11)) {
@@ -75,8 +77,10 @@ const account = web3.eth.accounts.create();
     const voteTx = await contract.methods.vote(candidateIndex).send({ from: account11, gas: '3000000' });
     const signedTransaction = await web3.eth.accounts.signTransaction(transaction, account.privateKey);
     console.log('Vote transaction hash:', voteTx.transactionHash);
+    return "Vote transaction hash: "+ voteTx.transactionHash;
   } else {
     console.log('Invalid address');
+    return "Invalid address";
   }
 
 }
@@ -94,6 +98,8 @@ async function endVoting() {
   const endTx = await contract.methods.endVoting().send({ from: defaultAccount });
   return endTx.transactionHash;
 }
-addCandidate('John Doe', 'Independent');
-startVoting()
-vote(1,8)
+//addCandidate('Sujay Chavan', 'HAHAHAHA');
+//startVoting()
+//vote(1,"0x597195f6394f3FFdE251B5d15C96CB4b84c3b65a")
+//getAccountList()
+module.exports = {getAccountList,addCandidate,vote};

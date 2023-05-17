@@ -23,19 +23,7 @@ export class DbnodeService {
     return this.http.post(baseUrl, data);
   }
 
-  update(id: any, data: any): Observable<any> {
-    return this.http.put(`${baseUrl}/${id}`, data);
-  }
-
-  delete(id: any): Observable<any> {
-    return this.http.delete(`${baseUrl}/${id}`);
-  }
-
-  deleteAll(): Observable<any> {
-    return this.http.delete(baseUrl);
-  }
-
-  findByTitle(title: any): Observable<any> {
-    return this.http.get(`${baseUrl}?title=${title}`);
+  vote(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/${data.VoterID}}`, data);
   }
 }

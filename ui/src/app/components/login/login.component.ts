@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DbnodeService } from 'src/app/dbnode.service';
+import { ApiService } from 'src/app/api.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private sb: MatSnackBar,
-    private databaseService: DbnodeService
+    private databaseService: DbnodeService,
+    private apiservice: ApiService
   ) {
     this.loginForm = this.fb.group({
       loginId: [
@@ -91,6 +93,7 @@ export class LoginComponent implements OnInit {
       next: (response: any) => {
         console.log(response);
         if (response.isAdmin == 0) {
+          this.apiservice.setVoterId(response.VoterID)
           this.router.navigate(['/vote']);
           this.sb.open('Login Success!!', '', {
             horizontalPosition: 'center',
@@ -148,13 +151,6 @@ export class LoginComponent implements OnInit {
       },
       error: (error: any) => {
         console.log(error.error.message);
-        if (error.error.message.includes("ER_DUP_ENTRY")) {
-          this.sb.open('Voter ID already exists please select a different voterID', '', {
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            duration: 5000
-          });
-        }
         this.sb.open(error.error.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',

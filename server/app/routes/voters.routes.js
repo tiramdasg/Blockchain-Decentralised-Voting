@@ -12,17 +12,8 @@ module.exports = app => {
     // Retrieve all voters
     router.get("/", voters.findAll);
 
-    // Retrieve all published voters
-    router.get("/published", voters.findAllPublished);
-
     // Update a voter with id
-    router.put("/:id", voters.update);
-
-    // Delete a voter with id
-    router.delete("/:id", voters.delete);
-
-    // Delete all voters
-    router.delete("/", voters.deleteAll);
+    router.put("/:id", voters.vote);
 
     app.use('/api/voters', router);
 };
