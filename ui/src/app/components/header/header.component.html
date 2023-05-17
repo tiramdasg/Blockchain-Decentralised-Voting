@@ -4,17 +4,17 @@
       <li><a routerLink="/login-register">
         <span><img width="60" alt="e-voting" src="../../../assets/vote.png"/></span> Decentralised Voting Sytem
       </a></li>
-      <li>
+      <li *ngIf="user">
         <a routerLink="/vote">Vote</a>
       </li>
-      <li>
+      <li *ngIf="admin">
         <a routerLink="/admin-approve">Approve Users</a>
       </li>
-      <li>
-        <a routerLink="/admin-approve">Setup Campaign</a>
+      <li *ngIf="admin">
+        <a routerLink="/admin-set-campaign">Setup Campaign</a>
       </li>
-      <li>
-        <a routerLink="/admin-approve">Get Results</a>
+      <li *ngIf="admin">
+        <a routerLink="/admin-get-results">Get Results</a>
       </li>
     </ul>
   </nav>

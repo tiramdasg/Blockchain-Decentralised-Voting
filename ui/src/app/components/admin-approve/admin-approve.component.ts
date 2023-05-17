@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./admin-approve.component.scss']
 })
 export class AdminApproveComponent {
-
+  panelOpenState = false;
 }

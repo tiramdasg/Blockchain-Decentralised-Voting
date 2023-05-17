@@ -1,1 +1,38 @@
-<p>admin-approve works!</p>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-12 col-lg-12">
+            <mat-accordion multi>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      User 1
+                    </mat-panel-title>
+                    <mat-panel-description style="color: #ed6a5a;">
+                      <strong>Awaiting Approval</strong>
+
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <p><strong>Name</strong>: User Name</p>
+                  <p><strong>Voter ID</strong>: xyz1234</p>
+                  <p><strong>Email</strong>: user@email.com </p>
+                  <button mat-raised-button class="btn btn-md fw-bold mb-2" type="submit">Approve</button>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      User 2
+                    </mat-panel-title>
+                    <mat-panel-description style="color: #a5b452;">
+                      <strong>Approved</strong>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <p><strong>Name</strong>: User2 Name</p>
+                  <p><strong>Voter ID</strong>: abc1234</p>
+                  <p><strong>Email</strong>: user2@email.de </p>
+                </mat-expansion-panel>
+              </mat-accordion>
+        </div>
+    </div>
+</div>

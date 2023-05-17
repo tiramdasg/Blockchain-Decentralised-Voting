@@ -1,0 +1,28 @@
+.mat-mdc-row .mat-mdc-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+    border-color: currentColor;
+}
+
+.yes-vote {
+    color: black;
+    background-color: #a5b452;
+    margin-top: 10px;
+}
+
+.no-vote {
+    color: black;
+    background-color: #ed6a5a;
+    margin-top: 10px;
+}
+
+button:hover {
+    color: black;
+    background-color: white;
+    border-color: #068d9d;
+    border: 1px solid;
+}

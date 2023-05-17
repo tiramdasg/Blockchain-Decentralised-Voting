@@ -1,38 +1,38 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { NgbAlert, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DbnodeService } from 'src/app/dbnode.service';
+import { ApiService } from 'src/app/api.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  styles: [`
-      :host .alert-custom {
-        color: darkgreen;
-        background-color: #a5b452;
-      }
-  `, ]
+  styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginbool = true;
   registerbool = false;
-  loginsuccess = false;
-  registersuccess = false;
-  // invalidbool = true;
-
+  hide = true;
   loginForm: FormGroup;
   registerForm: FormGroup;
+  ngOnInit(): void {
+    //sessionStorage.setItem('role', 'waiting');
+  }
 
-  @ViewChild('selfClosing', { static: false }) selfClosing!: NgbAlert;
-
-  constructor(private fb: FormBuilder, private sb: MatSnackBar) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private sb: MatSnackBar,
+    private databaseService: DbnodeService,
+    private apiservice: ApiService
+  ) {
     this.loginForm = this.fb.group({
       loginId: [
         '',
         Validators.compose([
           Validators.required,
-          Validators.pattern('^[a-zA-Z0-9]*$'),
+          Validators.pattern('^[0-9]*$'),
         ]),
       ],
       password: [
@@ -53,7 +53,7 @@ export class LoginComponent {
         '',
         Validators.compose([
           Validators.required,
-          Validators.pattern('^[a-zA-Z0-9]*$'),
+          Validators.pattern('^[0-9]*$'),
         ]),
       ],
       email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -63,15 +63,6 @@ export class LoginComponent {
       ],
     });
   }
-
-  // openmessage(message: string, classname: string) {
-  //   const configsb = new MatSnackBarConfig();
-  //   configsb.duration = 5000;
-  //   configsb.verticalPosition = 'top';
-  //   configsb.horizontalPosition = 'end';
-  //   configsb.panelClass = [classname];
-  //   this.sb.open(message, '', configsb);
-  // }
 
   makeLogin() {
     this.loginbool = true;
@@ -86,24 +77,86 @@ export class LoginComponent {
   }
 
   onLogin() {
-    // code
-    if(this.loginForm.get('loginId')?.value == 'user'){
+    /*if (this.loginForm.get('loginId')?.value == 'user') {
       sessionStorage.setItem('role', 'user');
-    }else if(this.loginForm.get('loginId')?.value == 'admin'){
-      sessionStorage.setItem('role', 'admin')
-      // to get var = sessionStorage.getItem('role')
+      this.router.navigate(['/vote']);
+    } else if (this.loginForm.get('loginId')?.value == 'admin') {
+      sessionStorage.setItem('role', 'admin');
+      this.router.navigate(['/admin-set-campaign']);
+    } */
+    const data = {
+      VoterID: this.loginForm.value.loginId,
+      Password: this.loginForm.value.password
     }
+    //console.log(data.VoterID)
+    this.databaseService.checkcredentials(data).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        if (response.isAdmin == 0) {
+          this.apiservice.setVoterId(response.VoterID)
+          this.router.navigate(['/vote']);
+          this.sb.open('Login Success!!', '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 5000
+          });
+        } else if (response.isAdmin == 1) {
+          this.router.navigate(['/admin-set-campaign']);
+          this.sb.open('Login Success!!', '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 5000
+          });
+        }
+      },
+      error: (error: any) => {
+        console.log(error.error.message);
+          this.sb.open(error.error.message, '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 5000
+          });
+      }
+    });
     this.loginForm?.reset();
-    this.loginsuccess = true;
-    setTimeout(() => this.selfClosing.close(), 4000);
-    // this.openmessage('Logged in!!', "success-message");
   }
 
   onRegister() {
-    // code
+    /*
     this.registerForm?.reset();
-    this.registersuccess = true;
-    setTimeout(() => this.selfClosing.close(), 4000);
-    // this.openmessage("Registration Done! Please wait for account approval!", "success-message");
+    sessionStorage.setItem('role', 'waiting');
+    
+    this.sb.open('Registered! Wait for the Admin to approve!', '', {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 5000
+    }); */
+
+    const data = {
+      VoterName: this.registerForm.value.name,
+      VoterID: this.registerForm.value.userid,
+      Email: this.registerForm.value.email,
+      Password: this.registerForm.value.password
+    };
+    //console.log(data.Email)
+    this.databaseService.add(data).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.registerForm?.reset();
+        this.sb.open('Registered! Wait for the Admin to approve!', '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+      },
+      error: (error: any) => {
+        console.log(error.error.message);
+        this.sb.open(error.error.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+      }
+    });
   }
 }

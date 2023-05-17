@@ -1,1 +1,29 @@
-<p>admin-set-campaign works!</p>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-12 col-lg-12">
+            <div class="container">List of Campaigns Active 
+                <span style="padding-left: 70%; padding-bottom: 25%;">
+                    <button mat-raised-button class="btn btn-md fw-bold mb-2" type="submit" (click)="setup = !setup">Setup campaign</button>
+                </span>
+            </div>
+
+            <mat-accordion multi *ngIf="setup " style="padding-top: 10px;">
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Campaign
+                    </mat-panel-title>
+                    <mat-panel-description style="color: #ed6a5a;">
+                      <strong>Awaiting Approval</strong>
+
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <p><strong>Name</strong>: User Name</p>
+                  <p><strong>Voter ID</strong>: xyz1234</p>
+                  <p><strong>Email</strong>: user@email.com </p>
+                  <button mat-raised-button class="btn btn-md fw-bold mb-2" type="submit">Approve</button>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+    </div>
+</div>

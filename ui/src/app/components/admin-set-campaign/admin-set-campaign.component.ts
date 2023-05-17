@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./admin-set-campaign.component.scss']
 })
 export class AdminSetCampaignComponent {
+  setup = false;
 
 }
