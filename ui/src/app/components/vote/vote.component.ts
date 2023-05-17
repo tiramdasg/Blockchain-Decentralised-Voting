@@ -67,7 +67,7 @@ export class VoteComponent implements OnDestroy {
     this.databaseService.vote(data).subscribe({
       next: (response: any) => {
         console.log(response.message);
-        this.sb.open(response.message, '', {
+        this.sb.open("Successfully Voted!", '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
           duration: 5000
