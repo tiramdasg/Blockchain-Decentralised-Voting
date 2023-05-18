@@ -111,6 +111,6 @@ async function endVoting() {
   const endTx = await contract.methods.endVoting().send({ from: defaultAccount });
   return endTx.transactionHash;
 }
-addCandidate('SUJAY', 'HAHAHAHA',"Message");
-getCandidatesDetails()
-module.exports = {getAccountList,addCandidate,vote};
+//addCandidate('SUJAY1', 'HAHAHAHANA',"Messages");
+//getCandidatesDetails()
+module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails};
