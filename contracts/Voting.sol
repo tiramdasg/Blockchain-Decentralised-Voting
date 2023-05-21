@@ -82,4 +82,13 @@ contract Voting {
     }
 
 
+function getVoteCounts() public view returns (uint[] memory) {
+    uint[] memory voteCounts = new uint[](candidateCount);
+    
+    for (uint i = 1; i <= candidateCount; i++) {
+        voteCounts[i-1] = candidatesInfo[i].voteCount;
+    }
+    
+    return voteCounts;
+}
 }
