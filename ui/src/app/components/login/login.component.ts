@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DbnodeService } from 'src/app/dbnode.service';
 import { ApiService } from 'src/app/api.service';
+import * as sha256 from 'crypto-js/sha256';
+import * as  sha1 from 'crypto-js/sha1';
 
 @Component({
   selector: 'app-login',
@@ -84,10 +86,13 @@ export class LoginComponent implements OnInit {
       sessionStorage.setItem('role', 'admin');
       this.router.navigate(['/admin-set-campaign']);
     } */
+    let pwd = sha256(sha1(this.loginForm.value.loginId + this.loginForm.value.password).toString()).toString();
+    this.loginForm.value.password=pwd;
     const data = {
       VoterID: this.loginForm.value.loginId,
       Password: this.loginForm.value.password
     }
+    console.log(data)
     //console.log(data.VoterID)
     this.databaseService.checkcredentials(data).subscribe({
       next: (response: any) => {
@@ -131,7 +136,8 @@ export class LoginComponent implements OnInit {
       verticalPosition: 'top',
       duration: 5000
     }); */
-
+    let pwd = sha256(sha1(this.registerForm.value.userid + this.registerForm.value.password).toString()).toString();
+    this.registerForm.value.password=pwd;
     const data = {
       VoterName: this.registerForm.value.name,
       VoterID: this.registerForm.value.userid,
