@@ -74,7 +74,7 @@
   "sourceMap": "27:500:0:-;;;120:52;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;148:5:0;:18;;-1:-1:-1;;;;;;148:18:0;156:10;148:18;;;27:500;;;;;;",
   "deployedSourceMap": "27:500:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;27:500:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;356:168;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;356:168:0;-1:-1:-1;;;;;356:168:0;;:::i;:::-;;77:36;;;:::i;:::-;;;;;;;;;;;;;;;;52:20;;;:::i;:::-;;;;-1:-1:-1;;;;;52:20:0;;;;;;;;;;;;;;245:105;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;245:105:0;;:::i;356:168::-;225:5;;-1:-1:-1;;;;;225:5:0;211:10;:19;207:26;;;419:19;452:11;419:45;;471:8;-1:-1:-1;;;;;471:21:0;;493:24;;471:47;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;471:47:0;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;471:47:0;;;;232:1;207:26;356:168;:::o;77:36::-;;;;:::o;52:20::-;;;-1:-1:-1;;;;;52:20:0;;:::o;245:105::-;225:5;;-1:-1:-1;;;;;225:5:0;211:10;:19;207:26;;;308:24;:36;245:105::o",
   "source": "pragma solidity ^0.5.0;\r\n\r\ncontract Migrations {\r\n  address public owner;\r\n  uint public last_completed_migration;\r\n\r\n  constructor() public {\r\n    owner = msg.sender;\r\n  }\r\n\r\n  modifier restricted() {\r\n    if (msg.sender == owner) _;\r\n  }\r\n\r\n  function setCompleted(uint completed) public restricted {\r\n    last_completed_migration = completed;\r\n  }\r\n\r\n  function upgrade(address new_address) public restricted {\r\n    Migrations upgraded = Migrations(new_address);\r\n    upgraded.setCompleted(last_completed_migration);\r\n  }\r\n}",
-  "sourcePath": "C:\\Users\\beant\\voting\\contracts\\Migrations.sol",
+  "sourcePath": "D:\\Sem2\\Advanced Internet Computing\\ProjectA5\\contracts\\Migrations.sol",
   "ast": {
     "absolutePath": "project:/contracts/Migrations.sol",
     "exportedSymbols": {
@@ -199,7 +199,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 250,
+                        "referencedDeclaration": 372,
                         "src": "156:3:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -283,7 +283,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 250,
+                        "referencedDeclaration": 372,
                         "src": "211:3:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -900,7 +900,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 250,
+                                  "referencedDeclaration": 372,
                                   "type": "msg",
                                   "value": "msg"
                                 },
@@ -991,7 +991,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 250,
+                                  "referencedDeclaration": 372,
                                   "type": "msg",
                                   "value": "msg"
                                 },
@@ -1469,12 +1469,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xedE1C7dfae046754404AB3450e0daEC27a649c9b",
-      "transactionHash": "0xb34ecb8c2a78252054ca341374fc7c0ac8889a4ba5c6eb69ee6c21b68d98630a"
+      "address": "0xC2edf797189b8a36f2aec65363F0f82C769b6f20",
+      "transactionHash": "0x547f36e86d61647521cc6a613709719d3fa645734cf6fc39276b8f919ca018dc"
     }
   },
   "schemaVersion": "3.4.13",
-  "updatedAt": "2023-05-05T17:29:02.111Z",
+  "updatedAt": "2023-05-21T19:12:44.440Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}
