@@ -22,6 +22,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
 import { MatExpansionModule } from '@angular/material/expansion';
+import {MatSelectModule} from '@angular/material/select';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatIconModule,
     HttpClientModule,
     MatExpansionModule,
+    MatSelectModule,
   ],
   providers: [
   ],

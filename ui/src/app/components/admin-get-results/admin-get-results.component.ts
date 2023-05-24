@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./admin-get-results.component.scss']
 })
 export class AdminGetResultsComponent {
+  campaigns: string[] = ['Campaign 1', 'Camp 2'];
 
 }
