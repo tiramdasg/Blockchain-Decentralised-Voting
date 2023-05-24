@@ -23,6 +23,10 @@ export class DbnodeService {
     return this.http.post(baseUrl, data);
   }
 
+  getAllCandidates(): Observable<any> {
+    return this.http.get(`${baseUrl}/candidates`);
+  }
+
   vote(data: any): Observable<any> {
     return this.http.put(`${baseUrl}/${data.VoterID}}`, data);
   }

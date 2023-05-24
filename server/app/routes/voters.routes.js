@@ -10,7 +10,7 @@ module.exports = app => {
     router.post("/:id", voters.checkCredentials);
 
     // Retrieve all voters
-    router.get("/", voters.findAll);
+    router.get("/candidates", voters.getCandidates);
 
     // Update a voter with id
     router.put("/:id", voters.vote);

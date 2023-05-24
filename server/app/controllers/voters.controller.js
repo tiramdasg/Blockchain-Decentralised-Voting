@@ -88,18 +88,18 @@ exports.checkCredentials = (req, res) => {
   });
 };
 
-// Retrieve all Tutorials from the database (with condition).
-exports.findAll = (req, res) => {
-  const title = req.query.title;
-
-  Voter.getAll(title, (err, data) => {
-    if (err)
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials."
-      });
-    else res.send(data);
-  });
+// Retrieve all candidates from the solidity
+exports.getCandidates = async (req, res) => {
+  try {
+    const a = await web3.getCandidatesDetails();
+    console.log("print 2: " + a)
+    res.send({"message":a});
+  } catch (err) {
+    console.log(err)
+    res.status(500).send({
+      message: err.message || "Some error occurred while adding the Voter"
+    });
+  }
 };
 
 

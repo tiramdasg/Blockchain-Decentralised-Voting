@@ -40,10 +40,33 @@ export class VoteComponent implements OnDestroy {
     private databaseService: DbnodeService,
     private sb: MatSnackBar) {
     //console.log(this.apiservice.getVoterId())
+    this.databaseService.getAllCandidates().subscribe({
+      next: (response: any) => {
+        console.log(response.message);
+        for(var i=0;i<response.message[0].length;i++) {
+          CANDIDATE_LIST[i].candidateName = response.message[0][i];
+          CANDIDATE_LIST[i].candidateParty = response.message[1][i];
+          CANDIDATE_LIST[i].candidateNote = response.message[2][i];
+          /*CANDIDATE_LIST.push({
+            candidateName: response.message[0][i],
+            candidateParty: response.message[1][i],
+            candidateNote: response.message[2][i]
+          }); */
+        }
+      },
+      error: (error: any) => {
+        console.log(error.error.message);
+        this.sb.open(error.error.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+      }
+    });
   }
   displayedColumns: string[] = ['candidateName', 'candidateParty', 'candidateNote'];
-  dataSource = new MatTableDataSource<CandidateInfo>(CANDIDATE_LIST);
 
+  dataSource = new MatTableDataSource<CandidateInfo>(CANDIDATE_LIST);
   selectedCandidate: Set<CandidateInfo> = new Set();
 
   selectCandidate(row: any) {
@@ -67,7 +90,11 @@ export class VoteComponent implements OnDestroy {
     this.databaseService.vote(data).subscribe({
       next: (response: any) => {
         console.log(response.message);
-        this.sb.open("Successfully Voted!", '', {
+        if(response.message.includes("Invalid"))
+        response.message="Already Voted";
+        else
+        response.message="Successfully Voted!";
+        this.sb.open(response.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
           duration: 5000

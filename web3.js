@@ -135,3 +135,6 @@ startVoting()
 vote(1,"0xbb2582bCb1FdB5F5aa795Ea4700a756Bb848625b")
 VoteCounts()
 module.exports = {getAccountList,addCandidate,vote};
+//addCandidate('SUJAY1', 'HAHAHAHANA',"Messages");
+//getCandidatesDetails()
+module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails};

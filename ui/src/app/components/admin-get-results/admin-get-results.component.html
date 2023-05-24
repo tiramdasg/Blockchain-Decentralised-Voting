@@ -1,1 +1,16 @@
-<p>admin-get-results works!</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+
+            <div class="col-lg-6 col-md-6">
+                <mat-form-field appearance="outline" class="col-md-12 col-lg-12">
+                  <mat-label>Campaign</mat-label>
+                  <mat-select  id="campaignName" placeholder="Select">
+                    <mat-option *ngFor="let campaign of campaigns" [value]="campaign">{{campaign}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+        </div>
+    </div>
+</div>
