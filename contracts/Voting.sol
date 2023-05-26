@@ -69,6 +69,10 @@ contract Voting {
         endVote = false;
     }
 
+    function hasVotingStarted() public view returns (bool) {
+    return startVote;
+    }
+
     event userVoted(uint candidateId);
 
     function vote(uint candidateId) public {

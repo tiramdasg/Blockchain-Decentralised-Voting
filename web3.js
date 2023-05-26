@@ -62,6 +62,20 @@ async function startVoting() {
   const startTx = await contract.methods.startVoting().send({ from: defaultAccount });
   return startTx.transactionHash;
 }
+async function hasVotingStarted() {
+  const accounts = await web3.eth.getAccounts();
+  const defaultAccount = accounts[0];
+
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = contractJson.networks[networkId];
+  const contractAddress = deployedNetwork.address;
+
+  const contract = new web3.eth.Contract(contractAbi, contractAddress);
+
+  const result = await contract.methods.hasVotingStarted().call({ from: defaultAccount });
+  console.log(result)
+  return result;
+}
 
 async function vote(candidateIndex, account) {
   console.log("The account I got is "+account)
@@ -131,9 +145,10 @@ async function endVoting() {
 
 addCandidate('SUJAY', 'HAHAHAHA',"Message");
 getCandidatesDetails()
-startVoting()
-vote(1,"0xbb2582bCb1FdB5F5aa795Ea4700a756Bb848625b")
+//startVoting()
+//vote(1,"0x99BF956BeA97D700F7C308DBDb5cad75A342EE5c")
 VoteCounts()
+hasVotingStarted()
 module.exports = {getAccountList,addCandidate,vote};
 //addCandidate('SUJAY1', 'HAHAHAHANA',"Messages");
 //getCandidatesDetails()
