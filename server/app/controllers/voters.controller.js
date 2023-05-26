@@ -18,6 +18,7 @@ exports.add = async (req, res) => {
       Email: req.body.Email,
       Password: req.body.Password,
       isAdmin: false,
+      isAprroved: false,
       public_key: null
     });
     console.log(req.body)

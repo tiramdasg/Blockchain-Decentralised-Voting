@@ -8,6 +8,7 @@ const Voter = function (voter) {
   this.Password = voter.Password;
   this.isAdmin = voter.isAdmin;
   this.public_key = voter.public_key;
+  this.isAprroved = voter.isAprroved;
 };
 
 Voter.add = async (newVoter) => {

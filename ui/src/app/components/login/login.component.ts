@@ -97,7 +97,7 @@ export class LoginComponent implements OnInit {
     this.databaseService.checkcredentials(data).subscribe({
       next: (response: any) => {
         console.log(response);
-        if (response.isAdmin == 0) {
+        if (response.isAdmin == 0 && response.isAprroved == 1) {
           this.apiservice.setVoterId(response.VoterID)
           this.router.navigate(['/vote']);
           this.sb.open('Login Success!!', '', {
@@ -105,9 +105,17 @@ export class LoginComponent implements OnInit {
             verticalPosition: 'top',
             duration: 5000
           });
-        } else if (response.isAdmin == 1) {
+        } 
+        else if (response.isAdmin == 1) {
           this.router.navigate(['/admin-set-campaign']);
           this.sb.open('Login Success!!', '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 5000
+          });
+        }
+        else if (response.isAprroved == 0) {
+          this.sb.open('Wait for the Admin to Approve bi*ch', '', {
             horizontalPosition: 'center',
             verticalPosition: 'top',
             duration: 5000
