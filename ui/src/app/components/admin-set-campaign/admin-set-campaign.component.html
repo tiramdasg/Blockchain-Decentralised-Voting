@@ -2,36 +2,19 @@
   <div class="row">
     <div class="col-md-12 col-lg-12">
       <div class="container">
-        <p class="display-6" *ngIf="setup">List of Campaigns Active <span style="padding-left: 55%; margin-bottom: 35%">
+        <p class="display-6" *ngIf="setup">Active Campaign<span style="padding-left: 55%; margin-bottom: 35%">
             <button mat-raised-button class="btn btn-md fw-bold mb-2" type="submit" (click)="setupCampaign()">
               Setup campaign
             </button>
           </span>
         </p>
         <p class="display-6" *ngIf="!setup">Setup Campaign</p>
-        
+
       </div>
 
       <mat-accordion multi *ngIf="setup" style="padding-top: 10px">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> Campaign 1 </mat-panel-title>
-            <mat-panel-description style="color: #ed6a5a">
-              <strong>Inactive</strong>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <p><strong>No of Candidates</strong>: 2</p>
-          <div class="list-inline">
-            <button type="button" (click)="startCampaign()" class="btn btn-md fw-bold mb-2 list-inline-item">
-              Start
-            </button>
-            <button type="button" (click)="getResults()" class="btn btn-md fw-bold mb-2 list-inline-item">
-              Get Results
-            </button>
-          </div>
-        </mat-expansion-panel>
 
-        <mat-expansion-panel>
+        <mat-expansion-panel [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title> Campaign 2 </mat-panel-title>
             <mat-panel-description style="color: #a5b452">
@@ -43,8 +26,15 @@
             <button type="button" (click)="stopCampaign()" class="btn btn-md fw-bold mb-2 list-inline-item">
               Stop
             </button>
+            <button type="button" (click)="startCampaign()" class="btn btn-md fw-bold mb-2 list-inline-item">
+              Start
+            </button>
+            <button type="button" (click)="getResults()" class="btn btn-md fw-bold mb-2 list-inline-item">
+              Get Results
+            </button>
           </div>
         </mat-expansion-panel>
+        
       </mat-accordion>
 
       <form [formGroup]="setupform" (ngSubmit)="startCampaign()" *ngIf="!setup">
@@ -57,7 +47,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col-lg-6 col-md-6">
+        <!-- <div class="col-lg-6 col-md-6">
           <mat-form-field appearance="outline" class="col-md-12 col-lg-12">
             <mat-label>Candidates</mat-label>
             <mat-select  id="candidates" placeholder="Select" formControlName="candidates" multiple>
@@ -67,10 +57,84 @@
               This field is required!
             </mat-error>
           </mat-form-field>
+        </div> -->
+        <div class="col-lg-6 col-md-6">
+          Add Candidates
         </div>
-        <div class="d-grid col-lg-6 col-md-6">
+        <div class="col-lg-6 col-md-6">
+          <mat-form-field appearance="outline" class="col-md-12 col-lg-12">
+            <mat-label>Candidate Name</mat-label>
+            <input matInput type="text" id="candidateName" placeholder="E.g. State Campaign"
+              formControlName="candidateName" />
+            <mat-error class="error-message" *ngIf="setupform.get('candidateName')?.invalid">
+              This field is required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6 col-md-6">
+          <mat-form-field appearance="outline" class="col-md-12 col-lg-12">
+            <mat-label>Candidate Party</mat-label>
+            <input matInput type="text" id="candidateParty" placeholder="E.g. State Campaign"
+              formControlName="candidateParty" />
+            <mat-error class="error-message" *ngIf="setupform.get('candidateParty')?.invalid">
+              This field is required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6 col-md-6">
+          <mat-form-field appearance="outline" class="col-md-12 col-lg-12">
+            <mat-label>Candidate Text</mat-label>
+            <input matInput type="text" id="candidateText" placeholder="E.g. State Campaign"
+              formControlName="candidateText" />
+            <mat-error class="error-message" *ngIf="setupform.get('candidateText')?.invalid">
+              This field is required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="d-grid col-lg-4 col-md-4">
+          <button mat-raised-button class="btn btn-sm fw-bold mb-2" type="button" (click)="addCandidates()"
+            [disabled]="setupform.get('candidateText')?.invalid && setupform.get('candidateParty')?.invalid && setupform.get('candidateName')?.invalid">
+            Add candidate
+          </button>
+        </div>
+
+        <!-- table for added candidates -->
+        <div class="col-md-12 col-lg-12" *ngIf="showtable">
+          <table mat-table [dataSource]="candidates" *ngIf="showtable">
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="candidateName">
+              <th mat-header-cell *matHeaderCellDef>
+                Candidate Name
+              </th>
+              <td mat-cell *matCellDef="let element"> {{element.candidateName}} </td>
+            </ng-container>
+
+            <!-- Party Column -->
+            <ng-container matColumnDef="candidateParty">
+              <th mat-header-cell *matHeaderCellDef>
+                Candidate Party
+              </th>
+              <td mat-cell *matCellDef="let element"> {{element.candidateParty}} </td>
+            </ng-container>
+
+            <!-- Note Column -->
+            <ng-container matColumnDef="candidateText">
+              <th mat-header-cell *matHeaderCellDef>
+                Candidate Text
+              </th>
+              <td mat-cell *matCellDef="let element"> {{element.candidateText}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+
+        <div class="d-grid col-lg-6 col-md-6 padding-end">
           <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" type="submit"
-              [disabled]="setupform.invalid">Start Campaign</button>
+            [disabled]="setupform.invalid">Start Campaign</button>
         </div>
       </form>
     </div>
