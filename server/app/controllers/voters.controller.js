@@ -94,7 +94,7 @@ exports.getCandidates = async (req, res) => {
   try {
     const a = await web3.getCandidatesDetails();
     console.log("print 2: " + a)
-    res.send({"message":a});
+    res.send({ "message": a });
   } catch (err) {
     console.log(err)
     res.status(500).send({
@@ -132,7 +132,7 @@ exports.vote = async (req, res) => {
         try {
           const a = await web3.vote(req.body.candidate_index, data.PUBLIC_KEY);
           console.log("print 2: " + a)
-          res.send({"message":a});
+          res.send({ "message": a });
         } catch (err) {
           console.log(err)
           res.status(500).send({
@@ -144,3 +144,56 @@ exports.vote = async (req, res) => {
   );
 };
 
+//Like I said admin rocks
+exports.admin = async (req, res) => {
+  try {
+    // Validate request
+    if (!req.body) {
+      res.status(400).send({
+        message: "Content can not be empty!"
+      });
+    }
+    //console.log("Here at 156: " + req.body)
+    if (req.body.userId == "12345") {
+      if (req.body.handleId == "addcandidate") {
+        const response = await web3.addCandidate(req.body.candidateName, req.body.candidateParty, req.body.candidateText);
+        console.log("Output is: " + response);
+        if (response.includes("0x"))
+          res.send({ "message": "Candidate Added Successfully" });
+        else
+          res.send({ "message": response })
+      }
+      else if (req.body.handleId == "startCampaign") {
+        const response = await web3.startVoting();
+        console.log("Output in startCampaign: " + response);
+        if (response.includes("0x"))
+          res.send({ "message": "Voting has Started" });
+        else
+          res.send({ "message": response })
+      }
+      else if (req.body.handleId == "checkcampaignstatus") {
+        const response = await web3.hasVotingStarted();
+        console.log("Output in checkcampaignstatus: " + response);
+        res.send({ "message": response })
+      }
+      else if (req.body.handleId == "stopCampaign") {
+        const response = await web3.endVoting();
+        console.log("Output in stopCampaign: " + response);
+        if (response.includes("0x"))
+          res.send({ "message": "Voting has been Stopped" });
+        else
+          res.send({ "message": response })
+      }
+
+    }
+    else {
+      res.status(500).send({
+        message: "Something went Wrong!"
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Some error occurred while adding the Voter"
+    });
+  }
+};

@@ -15,5 +15,8 @@ module.exports = app => {
     // Update a voter with id
     router.put("/:id", voters.vote);
 
+    //admin rocks
+    router.post("/admin/functions", voters.admin)
+
     app.use('/api/voters', router);
 };
