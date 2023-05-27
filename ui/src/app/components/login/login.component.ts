@@ -34,12 +34,11 @@ export class LoginComponent implements OnInit {
         '',
         Validators.compose([
           Validators.required,
-          Validators.pattern('^[0-9]*$'),
         ]),
       ],
       password: [
         '',
-        Validators.compose([Validators.required, Validators.minLength(8)]),
+        Validators.compose([Validators.required]),
       ],
     });
 
@@ -108,6 +107,7 @@ export class LoginComponent implements OnInit {
         } 
         else if (response.isAdmin == 1) {
           this.router.navigate(['/admin-set-campaign']);
+          this.apiservice.setVoterId(response.VoterID);
           this.sb.open('Login Success!!', '', {
             horizontalPosition: 'center',
             verticalPosition: 'top',
@@ -115,7 +115,7 @@ export class LoginComponent implements OnInit {
           });
         }
         else if (response.isAprroved == 0) {
-          this.sb.open('Wait for the Admin to Approve bi*ch', '', {
+          this.sb.open('Wait for the Admin to Approve', '', {
             horizontalPosition: 'center',
             verticalPosition: 'top',
             duration: 5000

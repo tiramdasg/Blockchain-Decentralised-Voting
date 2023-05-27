@@ -32,6 +32,7 @@ async function addCandidate(name, party,info) {
   const contract = new web3.eth.Contract(contractAbi, contractAddress, { from: defaultAccount });
 
   const tx = await contract.methods.addCandidate(name, party,info).send({ from: defaultAccount, gas: '3000000' });
+  console.log(tx.transactionHash);
   return tx.transactionHash;
 
 }
@@ -143,13 +144,14 @@ async function endVoting() {
   return endTx.transactionHash;
 }
 
-addCandidate('SUJAY', 'HAHAHAHA',"Message");
-getCandidatesDetails()
+//addCandidate('', null,"");
+//getCandidatesDetails()
 //startVoting()
+//endVoting()
 //vote(1,"0x99BF956BeA97D700F7C308DBDb5cad75A342EE5c")
-VoteCounts()
-hasVotingStarted()
-module.exports = {getAccountList,addCandidate,vote};
+//VoteCounts()
+//hasVotingStarted()
+//module.exports = {getAccountList,addCandidate,vote};
 //addCandidate('SUJAY1', 'HAHAHAHANA',"Messages");
 //getCandidatesDetails()
-module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails};
+module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting};

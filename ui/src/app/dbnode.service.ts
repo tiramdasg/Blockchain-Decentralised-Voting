@@ -30,4 +30,8 @@ export class DbnodeService {
   vote(data: any): Observable<any> {
     return this.http.put(`${baseUrl}/${data.VoterID}}`, data);
   }
+
+  admin(data: any): Observable<any> {
+    return this.http.post(`${baseUrl}/admin/functions`, data);
+  }
 }
