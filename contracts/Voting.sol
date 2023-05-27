@@ -80,7 +80,7 @@ contract Voting {
         require(users[msg.sender] == false);
         require(candidateId > 0 && candidateId <= candidateCount);
         require(startVote == true);
-        //require(endVote == false);
+        require(endVote == false);
         users[msg.sender] = true;
         candidatesInfo[candidateId].voteCount ++;
         emit userVoted(candidateId);

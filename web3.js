@@ -148,10 +148,10 @@ async function endVoting() {
 //getCandidatesDetails()
 //startVoting()
 //endVoting()
-//vote(1,"0x99BF956BeA97D700F7C308DBDb5cad75A342EE5c")
+//vote(2,"0x3C9817D948E52a62d650A4fBAaB54d6e1a115800")
 //VoteCounts()
 //hasVotingStarted()
 //module.exports = {getAccountList,addCandidate,vote};
-//addCandidate('SUJAY1', 'HAHAHAHANA',"Messages");
+//addCandidate('SUJAY3', 'HAHAHAHANA',"Messages");
 //getCandidatesDetails()
-module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting};
+module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting,VoteCounts};

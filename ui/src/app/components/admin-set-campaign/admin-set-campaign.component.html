@@ -29,7 +29,7 @@
             <button type="button" (click)="startCampaign()" [disabled]="hasCampaignstarted" class="btn btn-md fw-bold mb-2 list-inline-item">
               Start
             </button>
-            <button type="button" (click)="getResults()" class="btn btn-md fw-bold mb-2 list-inline-item">
+            <button type="button" (click)="getResults()" [disabled]="hasCampaignstarted" class="btn btn-md fw-bold mb-2 list-inline-item">
               Get Results
             </button>
           </div>
@@ -135,7 +135,7 @@
         <div class="d-grid col-lg-6 col-md-6 padding-end">
           <!-- <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" type="submit"
             [disabled]="setupform.invalid">Start Campaign</button> -->
-          <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" type="submit">Start Campaign</button>
+          <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" [disabled]="hasCampaignstarted" type="submit">Start Campaign</button>
         </div>
       </form>
     </div>
