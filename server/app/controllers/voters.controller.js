@@ -74,19 +74,27 @@ exports.add = async (req, res) => {
 
 // check credentials
 exports.checkCredentials = (req, res) => {
-  Voter.checkCredentials(req.body.VoterID, req.body.Password, (err, data) => {
-    if (err) {
-      if (err.kind === "not_found") {
-        res.status(404).send({
-          message: `Invalid Voter ID/Password`
-        });
-      } else {
-        res.status(500).send({
-          message: "Error retrieving Voter with id " + req.params.id
-        });
-      }
-    } else res.send(data);
-  });
+  try {
+    Voter.checkCredentials(req.body.VoterID, req.body.Password, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Invalid Voter ID/Password`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error retrieving Voter with id " + req.params.id
+          });
+        }
+      } else res.send(data);
+    });
+  }
+  catch (err) {
+    console.log(err)
+    res.status(500).send({
+      message: err.message || "Some error occurred while adding the Voter"
+    });
+  }
 };
 
 // Retrieve all candidates from the solidity
@@ -106,55 +114,92 @@ exports.getCandidates = async (req, res) => {
 
 // vote for candidate
 exports.vote = async (req, res) => {
-  // Validate Request
-  if (!req.body) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-  }
+  try {
+    // Validate Request
+    if (!req.body) {
+      res.status(400).send({
+        message: "Content can not be empty!"
+      });
+    }
 
-  console.log("Here with body " + req.body);
+    console.log("Here with body " + req.body);
 
-  Voter.getKey(req.body.VoterID,
-    async (err, data) => {
-      if (err) {
-        if (err.kind === "not_found") {
-          res.status(404).send({
-            message: `Not found Voter with id ${req.body.VoterID}.`
-          });
+    Voter.getKey(req.body.VoterID,
+      async (err, data) => {
+        if (err) {
+          if (err.kind === "not_found") {
+            res.status(404).send({
+              message: `Not found Voter with id ${req.body.VoterID}.`
+            });
+          } else {
+            res.status(500).send({
+              message: "Error in finding Voter with id " + req.body.VoterID
+            });
+          }
         } else {
-          res.status(500).send({
-            message: "Error in finding Voter with id " + req.body.VoterID
-          });
-        }
-      } else {
-        console.log("Print 1: " + data.PUBLIC_KEY)
-        try {
-          const a = await web3.vote(req.body.candidate_index, data.PUBLIC_KEY);
-          console.log("print 2: " + a)
-          res.send({ "message": a });
-        } catch (err) {
-          console.log(err)
-          res.status(500).send({
-            message: err.message || "Some error occurred while adding the Voter"
-          });
+          console.log("Print 1: " + data.PUBLIC_KEY)
+          try {
+            const a = await web3.vote(req.body.candidate_index, data.PUBLIC_KEY);
+            console.log("print 2: " + a)
+            res.send({ "message": a });
+          } catch (err) {
+            console.log(err)
+            res.status(500).send({
+              message: err.message || "Some error occurred while adding the Voter"
+            });
+          }
         }
       }
-    }
-  );
+    );
+  }
+  catch (err) {
+    console.log(err)
+    res.status(500).send({
+      message: err.message || "Some error occurred while adding the Voter"
+    });
+  }
 };
 
 //Like I said admin rocks
 exports.admin = async (req, res) => {
   try {
     // Validate request
+    console.log("151")
     if (!req.body) {
       res.status(400).send({
         message: "Content can not be empty!"
       });
     }
+    admin_check = 0;
     //console.log("Here at 156: " + req.body)
-    if (req.body.userId == "12345") {
+
+    await Voter.checkUser(req.body.userId)
+      .then(data => {
+        // Key found
+        console.log("found User/Voter: ", data);
+        console.log("Checking if the User is an admin:) " + data.isAdmin)
+        if (data.isAdmin == 1) {
+          admin_check = 1;
+        }
+        else
+          admin_check = 0;
+      })
+      .catch(err => {
+        if (err.kind === "not_found") {
+          //console.log("Error in not found "+err);
+          res.status(404).send({
+            message: `Not found User with id ${req.body.userId}.`
+          });
+        } else {
+          console.log("Error in else " + err);
+          res.status(500).send({
+            message: "Error retrieving Voter with id " + req.body.userId
+          });
+        }
+      });
+
+
+    if (admin_check == 1) {
       if (req.body.handleId == "addcandidate") {
         const response = await web3.addCandidate(req.body.candidateName, req.body.candidateParty, req.body.candidateText);
         console.log("Output is: " + response);

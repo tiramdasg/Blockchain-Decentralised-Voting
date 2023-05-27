@@ -66,12 +66,12 @@ export class AdminSetCampaignComponent implements OnInit {
 
   addCandidates() {
 
-    this.dummy = {
+/*    this.dummy = {
       'candidateName': this.setupform.get('candidateName')?.value,
       'candidateParty': this.setupform.get('candidateParty')?.value,
       'candidateText': this.setupform.get('candidateText')?.value
     };
-    this.candidates.push(this.dummy);
+    this.candidates.push(this.dummy); */
     //console.log(this.candidates);
 
     const data = {
