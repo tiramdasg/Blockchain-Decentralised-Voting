@@ -64,6 +64,7 @@ contract Voting {
     }
     function startVoting() public Admin {
         startVote = true;
+        endVote = false;
     }
     function endVoting() public  Admin{
         endVote = true;
