@@ -36,6 +36,7 @@ const CANDIDATE_LIST: CandidateInfo[] = [
   providers: []
 })
 export class VoteComponent implements OnDestroy {
+  candidatesfrombackend: any;
   constructor(private apiservice: ApiService,
     private databaseService: DbnodeService,
     private sb: MatSnackBar) {
@@ -43,7 +44,8 @@ export class VoteComponent implements OnDestroy {
     this.databaseService.getAllCandidates().subscribe({
       next: (response: any) => {
         console.log(response.message);
-        for(var i=0;i<response.message[0].length;i++) {
+        this.candidatesfrombackend = response.message;
+        for (var i = 0; i < response.message[0].length; i++) {
           CANDIDATE_LIST[i].candidateName = response.message[0][i];
           CANDIDATE_LIST[i].candidateParty = response.message[1][i];
           CANDIDATE_LIST[i].candidateNote = response.message[2][i];
@@ -80,20 +82,29 @@ export class VoteComponent implements OnDestroy {
 
   web3 = new VoteWeb3Component()
   castVote() {
-    const [x] = this.selectedCandidate;
-    //console.log(x);
+    let x;
+    this.selectedCandidate.forEach((element) => {
+      x = element['candidateName'];
+    });
+    let y;
+    for (var i = 0; i < this.candidatesfrombackend[0].length; i++) {
+      if (this.candidatesfrombackend[0][i] === x) {
+        y = i + 1;
+        break;
+      }
+    }
     const data = {
       VoterID: this.apiservice.getVoterId(),
-      candidate_index: 1
+      candidate_index: y
     }
-    console.log(data.VoterID);
+    console.log(data.candidate_index);
     this.databaseService.vote(data).subscribe({
       next: (response: any) => {
         console.log(response.message);
-        if(response.message.includes("Invalid"))
-        response.message="Already Voted";
+        if (response.message.includes("Invalid"))
+          response.message = "Already Voted";
         else
-        response.message="Successfully Voted!";
+          response.message = "Successfully Voted!";
         this.sb.open(response.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -102,8 +113,8 @@ export class VoteComponent implements OnDestroy {
       },
       error: (error: any) => {
         console.log(error.error.message);
-        if(error.error.message.includes("revert"))
-        error.error.message="Already Voted";
+        if (error.error.message.includes("revert"))
+          error.error.message = "Already Voted";
         this.sb.open(error.error.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
