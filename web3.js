@@ -32,6 +32,7 @@ async function addCandidate(name, party,info) {
   const contract = new web3.eth.Contract(contractAbi, contractAddress, { from: defaultAccount });
 
   const tx = await contract.methods.addCandidate(name, party,info).send({ from: defaultAccount, gas: '3000000' });
+  console.log(tx.transactionHash);
   return tx.transactionHash;
 
 }
@@ -61,6 +62,20 @@ async function startVoting() {
   const admin = await contract.methods.getAdmin().call();
   const startTx = await contract.methods.startVoting().send({ from: defaultAccount });
   return startTx.transactionHash;
+}
+async function hasVotingStarted() {
+  const accounts = await web3.eth.getAccounts();
+  const defaultAccount = accounts[0];
+
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = contractJson.networks[networkId];
+  const contractAddress = deployedNetwork.address;
+
+  const contract = new web3.eth.Contract(contractAbi, contractAddress);
+
+  const result = await contract.methods.hasVotingStarted().call({ from: defaultAccount });
+  console.log(result)
+  return result;
 }
 
 async function vote(candidateIndex, account) {
@@ -129,9 +144,14 @@ async function endVoting() {
   return endTx.transactionHash;
 }
 
-addCandidate('SUJAY', 'HAHAHAHA',"Message");
-getCandidatesDetails()
-startVoting()
-vote(1,"0x2974faBC00BB9fd0C41df886f7c6D7F4CC4De78D")
-VoteCounts()
-module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails};
+//addCandidate('', null,"");
+//getCandidatesDetails()
+//startVoting()
+//endVoting()
+//vote(2,"0x3C9817D948E52a62d650A4fBAaB54d6e1a115800")
+//VoteCounts()
+//hasVotingStarted()
+//module.exports = {getAccountList,addCandidate,vote};
+//addCandidate('SUJAY3', 'HAHAHAHANA',"Messages");
+//getCandidatesDetails()
+module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting,VoteCounts};

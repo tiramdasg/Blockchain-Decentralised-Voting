@@ -64,9 +64,15 @@ contract Voting {
     }
     function startVoting() public Admin {
         startVote = true;
+        endVote = false;
     }
     function endVoting() public  Admin{
-        endVote = false;
+        endVote = true;
+        startVote = false;
+    }
+
+    function hasVotingStarted() public view returns (bool) {
+    return startVote;
     }
 
     event userVoted(uint candidateId);
@@ -75,7 +81,7 @@ contract Voting {
         require(users[msg.sender] == false);
         require(candidateId > 0 && candidateId <= candidateCount);
         require(startVote == true);
-        //require(endVote == false);
+        require(endVote == false);
         users[msg.sender] = true;
         candidatesInfo[candidateId].voteCount ++;
         emit userVoted(candidateId);

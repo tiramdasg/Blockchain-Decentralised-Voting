@@ -59,6 +59,25 @@ Voter.checkKey = async (key) => {
   });
 };
 
+Voter.checkUser = async (userId) => {
+  return new Promise((resolve, reject) => {
+    sql.query("SELECT * FROM VOTERS WHERE VoterID = ?", [userId], (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        reject(err);
+        return;
+      }
+
+      if (res.length) {
+        console.log("Output in checkUser: "+res[0])
+        resolve(res[0]);
+      } else {
+        reject({ kind: "not_found" });
+      }
+    });
+  });
+};
+
 /*
 Voter.checkKey = (key, result) => {
   sql.query("SELECT public_key FROM VOTERS WHERE public_key = ?",

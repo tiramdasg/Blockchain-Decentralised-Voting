@@ -23,7 +23,7 @@
           </mat-expansion-panel-header>
           <p><strong>No of Candidates</strong>: 4</p>
           <div class="list-inline">
-            <button type="button" (click)="stopCampaign()" class="btn btn-md fw-bold mb-2 list-inline-item">
+            <button type="button" (click)="stopCampaign()" [disabled]="!hasCampaignstarted" class="btn btn-md fw-bold mb-2 list-inline-item">
               Stop
             </button>
             <!-- <button type="button" (click)="startCampaign()" class="btn btn-md fw-bold mb-2 list-inline-item">
@@ -34,7 +34,7 @@
             </button>
           </div>
         </mat-expansion-panel>
-        
+
       </mat-accordion>
 
       <form [formGroup]="setupform" (ngSubmit)="startCampaign()" *ngIf="!setup">
@@ -133,8 +133,9 @@
         </div>
 
         <div class="d-grid col-lg-6 col-md-6 padding-end">
-          <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" type="submit"
-            [disabled]="setupform.invalid">Start Campaign</button>
+          <!-- <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" type="submit"
+            [disabled]="setupform.invalid">Start Campaign</button> -->
+          <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" [disabled]="hasCampaignstarted" type="submit">Start Campaign</button>
         </div>
       </form>
     </div>

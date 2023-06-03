@@ -34,12 +34,11 @@ export class LoginComponent implements OnInit {
         '',
         Validators.compose([
           Validators.required,
-          Validators.pattern('^[0-9]*$'),
         ]),
       ],
       password: [
         '',
-        Validators.compose([Validators.required, Validators.minLength(8)]),
+        Validators.compose([Validators.required]),
       ],
     });
 
@@ -97,7 +96,7 @@ export class LoginComponent implements OnInit {
     this.databaseService.checkcredentials(data).subscribe({
       next: (response: any) => {
         console.log(response);
-        if (response.isAdmin == 0) {
+        if (response.isAdmin == 0 && response.isAprroved == 1) {
           this.apiservice.setVoterId(response.VoterID)
           this.router.navigate(['/vote']);
           this.sb.open('Login Success!!', '', {
@@ -106,14 +105,30 @@ export class LoginComponent implements OnInit {
             duration: 5000
           });
           sessionStorage.setItem('role', 'user')
-        } else if (response.isAdmin == 1) {
+        }
+        else if (response.isAdmin == 1) {
           this.router.navigate(['/admin-set-campaign']);
+          this.apiservice.setVoterId(response.VoterID);
           this.sb.open('Login Success!!', '', {
             horizontalPosition: 'center',
             verticalPosition: 'top',
             duration: 5000
           });
           sessionStorage.setItem('role', 'admin')
+        }
+        else if (response.isAprroved == 0) {
+          this.sb.open('Wait for the Admin to Approve', '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 5000
+          });
+        }
+        else if (response.isAprroved == 0) {
+          this.sb.open('Wait for the Admin to Approve', '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 5000
+          });
         }
       },
       error: (error: any) => {
