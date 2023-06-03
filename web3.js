@@ -132,9 +132,6 @@ async function endVoting() {
 addCandidate('SUJAY', 'HAHAHAHA',"Message");
 getCandidatesDetails()
 startVoting()
-vote(1,"0xbb2582bCb1FdB5F5aa795Ea4700a756Bb848625b")
+vote(1,"0x2974faBC00BB9fd0C41df886f7c6D7F4CC4De78D")
 VoteCounts()
-module.exports = {getAccountList,addCandidate,vote};
-//addCandidate('SUJAY1', 'HAHAHAHANA',"Messages");
-//getCandidatesDetails()
 module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails};

@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   registerForm: FormGroup;
   ngOnInit(): void {
-    //sessionStorage.setItem('role', 'waiting');
+    sessionStorage.setItem('role', 'waiting');
   }
 
   constructor(
@@ -105,6 +105,7 @@ export class LoginComponent implements OnInit {
             verticalPosition: 'top',
             duration: 5000
           });
+          sessionStorage.setItem('role', 'user')
         } else if (response.isAdmin == 1) {
           this.router.navigate(['/admin-set-campaign']);
           this.sb.open('Login Success!!', '', {
@@ -112,6 +113,7 @@ export class LoginComponent implements OnInit {
             verticalPosition: 'top',
             duration: 5000
           });
+          sessionStorage.setItem('role', 'admin')
         }
       },
       error: (error: any) => {
@@ -142,9 +144,11 @@ export class LoginComponent implements OnInit {
       VoterName: this.registerForm.value.name,
       VoterID: this.registerForm.value.userid,
       Email: this.registerForm.value.email,
-      Password: this.registerForm.value.password
+      Password: this.registerForm.value.password,
+      isApproved: 0,
+      hasVoted: 0
     };
-    //console.log(data.Email)
+    console.log(data)
     this.databaseService.add(data).subscribe({
       next: (response: any) => {
         console.log(response);
@@ -154,6 +158,7 @@ export class LoginComponent implements OnInit {
           verticalPosition: 'top',
           duration: 5000
         });
+        sessionStorage.setItem('role', 'waiting')
       },
       error: (error: any) => {
         console.log(error.error.message);

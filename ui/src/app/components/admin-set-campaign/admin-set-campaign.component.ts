@@ -9,7 +9,7 @@ import { MatTable } from '@angular/material/table';
   styleUrls: ['./admin-set-campaign.component.scss'],
 })
 export class AdminSetCampaignComponent {
-  setup = true;
+  setup = false;
   setupform: FormGroup;
   candidates: { [key: string]: any }[] = [];
   @ViewChild(MatTable) table!: MatTable<any>;
