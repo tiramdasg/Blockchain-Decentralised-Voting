@@ -34,4 +34,14 @@ export class DbnodeService {
   admin(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/admin/functions`, data);
   }
+
+  // voters list to be approved
+  approveUsersList(): Observable<any> {
+    return this.http.get(`${baseUrl}/getapprove`)
+  }
+
+  approveVoter(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/approvevoter`, data)
+  }
+
 }

@@ -252,5 +252,40 @@ exports.admin = async (req, res) => {
         message: err.message || "Some error occurred while adding the Voter"
       });
     }
-  }
+  };
+};
+
+// get users to be approved
+exports.checkApproved = (req, res) => {
+  Voter.checkApproved((err, data) => {
+  if (err) {
+    if (err.kind === "not_found") {
+      res.status(404).send({
+        message: `Invalid Request`
+      });
+    } else {
+      res.status(500).send({
+        message: "Error retrieving Voters list"     
+      });
+    }
+  } else res.send(data);
+});
+};
+
+// get users to be approved
+exports.approveVoter = async (req, res) => {
+console.log('approve voter works?', req.body.VoterID)
+Voter.approveVoter(req.body.VoterID, (err, data) => {
+  if (err) {
+    if (err.kind === "not_found") {
+      res.status(404).send({
+        message: `Invalid Voter ID!`
+      });
+    } else {
+      res.status(500).send({
+        message: "Error approving the user! Try Again!"
+      });
+    }
+  } else res.send(data);
+});
 };
