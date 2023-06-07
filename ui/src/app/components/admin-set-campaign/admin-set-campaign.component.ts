@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./admin-set-campaign.component.scss'],
 })
 export class AdminSetCampaignComponent implements OnInit {
-  setup = true;
+  setup = false;
   setupform: FormGroup;
   candidates: { [key: string]: any }[] = [];
   dummy: { [key: string]: any } = {};

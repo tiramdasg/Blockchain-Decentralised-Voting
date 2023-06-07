@@ -140,7 +140,7 @@ Voter.getKey = (VoterID, result) => {
 // send to be approved list
 Voter.checkApproved = (result) => {
   sql.query(
-    "SELECT VoterID, VoterName, Email, isAdmin, isApproved FROM voters WHERE isAdmin = 0 AND (NOT isApproved = 1 OR isApproved IS NULL)",
+    "SELECT VoterID, VoterName, Email, isAdmin, isAprroved FROM voters WHERE isAdmin = 0 AND (NOT isAprroved = 1 OR isAprroved IS NULL)",
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -160,7 +160,7 @@ Voter.checkApproved = (result) => {
 
 // send to be approved list
 Voter.approveVoter = (id, result) => {
-  sql.query("UPDATE voters SET isApproved = 1 WHERE VoterID = ?",
+  sql.query("UPDATE voters SET isAprroved = 1 WHERE VoterID = ?",
     [id], (err, res) => {
       if (err) {
         console.log("error: ", err);

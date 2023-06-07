@@ -144,14 +144,10 @@ async function endVoting() {
   return endTx.transactionHash;
 }
 
-//addCandidate('', null,"");
-//getCandidatesDetails()
-//startVoting()
-//endVoting()
-//vote(2,"0x3C9817D948E52a62d650A4fBAaB54d6e1a115800")
-//VoteCounts()
-//hasVotingStarted()
-//module.exports = {getAccountList,addCandidate,vote};
-//addCandidate('SUJAY3', 'HAHAHAHANA',"Messages");
-//getCandidatesDetails()
+
+// addCandidate('ABC', 'ABC Party',"Vote for me!");
+// startVoting();
+// vote(1,"0x6B6DB76a95026ae33e6E30672F126f957989E3cd");
+// getCandidatesDetails()
+
 module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting,VoteCounts};
