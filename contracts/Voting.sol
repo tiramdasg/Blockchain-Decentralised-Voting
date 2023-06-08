@@ -86,7 +86,12 @@ contract Voting {
         candidatesInfo[candidateId].voteCount ++;
         emit userVoted(candidateId);
     }
-function getVoteCounts() public view returns (uint[] memory) {
+
+    function getVotingStatus() public view returns (bool) {
+        return users[msg.sender];
+    }
+
+    function getVoteCounts() public view returns (uint[] memory) {
     uint[] memory voteCounts = new uint[](candidateCount);
     
     for (uint i = 1; i <= candidateCount; i++) {
