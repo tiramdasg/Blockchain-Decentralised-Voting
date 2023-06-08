@@ -138,28 +138,27 @@ Voter.getKey = (VoterID, result) => {
 };
 
 // send to be approved list
-Voter.checkApproved = (result) => {
-  sql.query(
-    "SELECT VoterID, VoterName, Email, isAdmin, isAprroved FROM voters WHERE isAdmin = 0 AND (NOT isAprroved = 1 OR isAprroved IS NULL)",
-    (err, res) => {
+Voter.checkApproved = async () => {
+  return new Promise((resolve, reject) => {
+    sql.query("SELECT VoterID, VoterName, Email, isAdmin, isAprroved FROM voters WHERE isAdmin = 0 AND (NOT isAprroved = 1 OR isAprroved IS NULL)", (err, res) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
+        reject(err);
         return;
       }
 
       if (res.length) {
-        console.log("voters to be approved: ", res);
-        result(null, res);
-        return;
+        console.log("Output in checkUser: "+res)
+        resolve(res);
+      } else {
+        reject({ kind: "not_found" });
       }
-      result({ kind: "not_found" }, null);
-    }
-  );
+    });
+  });
 };
 
 // send to be approved list
-Voter.approveVoter = (id, result) => {
+Voter.approveVoter = async (id, result) => {
   sql.query("UPDATE voters SET isAprroved = 1 WHERE VoterID = ?",
     [id], (err, res) => {
       if (err) {
@@ -168,12 +167,7 @@ Voter.approveVoter = (id, result) => {
         return;
       }
 
-      if (res.length) {
-        console.log("voter to be approved: ", res);
-        result(null, res);
-        return;
-      }
-      result({ kind: "not_found" }, null);
+      result(null, { "message": "User Approved" });
     }
   );
 };

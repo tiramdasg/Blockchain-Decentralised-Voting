@@ -16,16 +16,33 @@ export class AdminApproveComponent implements OnInit {
     'Email': string,
     'isAdmin': number,
     'isApproved': number
-  } [];
+  }[];
 
   constructor(private apiservice: ApiService,
     private databaseService: DbnodeService,
-    private sb: MatSnackBar) {      
-    // this.voters_to_be_approved = [];
-    this.databaseService.approveUsersList().subscribe({
+    private sb: MatSnackBar) {
+  }
+
+  ngOnInit(): void {
+    const data = {
+      userId: this.apiservice.getVoterId(),
+      handleId: "approverlist"
+    }
+    this.databaseService.admin(data).subscribe({
       next: (response: any) => {
-        console.log(response);
-        this.voters_to_be_approved = response;
+        if (response.message) {
+        this.sb.open(response.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+        if (this.voters_to_be_approved)
+          this.voters_to_be_approved.pop();
+        }
+        else {
+          console.log(response);
+          this.voters_to_be_approved = response;
+        }
       },
       error: (error: any) => {
         console.log(error.error.message);
@@ -38,15 +55,22 @@ export class AdminApproveComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    
-  }
-
-  approveVoter(user: any){
+  approveVoter(user: any) {
     // console.log(user)
-    this.databaseService.approveVoter(user.VoterID).subscribe({
+    const data = {
+      userId: this.apiservice.getVoterId(),
+      handleId: "approvevoter",
+      voterid: user.VoterID
+    }
+    this.databaseService.admin(data).subscribe({
       next: (response: any) => {
         console.log(response);
+        this.sb.open(response.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+        this.ngOnInit()
       },
       error: (error: any) => {
         console.log(error.error.message);

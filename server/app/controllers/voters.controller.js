@@ -241,6 +241,33 @@ exports.admin = async (req, res) => {
             res.send({ "message": response })
           }
         }
+        else if (req.body.handleId == "approverlist") {
+
+          await Voter.checkApproved()
+            .then(data => {
+              res.send(data);
+            })
+            .catch(err => {
+              if (err.kind === "not_found") {
+                res.send({ "message": "No users to approve" })
+              } else {
+                res.status(500).send({
+                  message: "Error retrieving Voters list"
+                });
+              }
+            });
+        }
+
+        else if (req.body.handleId == "approvevoter") {
+          console.log("Voter to be approved is: " + req.body.voterid)
+          await Voter.approveVoter(req.body.voterid, (err, data) => {
+            if (err) {
+                res.status(500).send({
+                  message: "Error approving the user! Try Again!"
+                });
+            } else res.send(data);
+          });
+        }
       }
       else {
         res.status(500).send({
@@ -255,7 +282,7 @@ exports.admin = async (req, res) => {
   };
 };
 
-// get users to be approved
+/* // get users to be approved
 exports.checkApproved = (req, res) => {
   Voter.checkApproved((err, data) => {
   if (err) {
@@ -288,4 +315,4 @@ Voter.approveVoter(req.body.VoterID, (err, data) => {
     }
   } else res.send(data);
 });
-};
+}; */
