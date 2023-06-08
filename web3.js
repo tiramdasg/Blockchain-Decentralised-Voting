@@ -162,10 +162,10 @@ async function endVoting() {
 }
 
 
-addCandidate('ABC', 'ABC Party',"Vote for me!");
-startVoting();
+//addCandidate('ABC', 'ABC Party',"Vote for me!");
+//startVoting();
 //vote(1,"0x15194bc9f434882cd8d7B9c5603196c58803fc73");
 // getCandidatesDetails()
-getVotingStatus("0x15194bc9f434882cd8d7B9c5603196c58803fc73")
+//getVotingStatus("0x15194bc9f434882cd8d7B9c5603196c58803fc73")
 
-module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting,VoteCounts};
+module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting,VoteCounts,getVotingStatus};

@@ -73,9 +73,10 @@ exports.add = async (req, res) => {
 };
 
 // check credentials
-exports.checkCredentials = (req, res) => {
+exports.checkCredentials = async (req, res) => {
   try {
-    Voter.checkCredentials(req.body.VoterID, req.body.Password, (err, data) => {
+
+    Voter.checkCredentials(req.body.VoterID, req.body.Password, async (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
@@ -86,7 +87,21 @@ exports.checkCredentials = (req, res) => {
             message: "Error retrieving Voter with id " + req.params.id
           });
         }
-      } else res.send(data);
+      } else {
+        if(data.isAdmin==0) {
+        const votingstatus = await web3.hasVotingStarted();
+        const uservotingstatus = await web3.getVotingStatus(data.public_key);
+        if (votingstatus == false) {
+          res.status(500).send({ "message": "Voting Campaign hasn't started" })
+        }
+        else if (uservotingstatus == true) {
+          res.status(500).send({ "message": "You have already Voted" })
+        } else
+          res.send(data);
+      } else 
+        res.send(data);
+
+      }
     });
   }
   catch (err) {
@@ -262,9 +277,9 @@ exports.admin = async (req, res) => {
           console.log("Voter to be approved is: " + req.body.voterid)
           await Voter.approveVoter(req.body.voterid, (err, data) => {
             if (err) {
-                res.status(500).send({
-                  message: "Error approving the user! Try Again!"
-                });
+              res.status(500).send({
+                message: "Error approving the user! Try Again!"
+              });
             } else res.send(data);
           });
         }
