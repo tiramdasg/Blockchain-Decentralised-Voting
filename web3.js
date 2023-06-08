@@ -112,6 +112,23 @@ const account = web3.eth.accounts.create();
   }
 
 }
+
+async function getVotingStatus(userAddress) {
+  const accounts = await web3.eth.getAccounts();
+  const defaultAccount = accounts[0];
+
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = contractJson.networks[networkId];
+  const contractAddress = deployedNetwork.address;
+
+  const contract = new web3.eth.Contract(contractAbi, contractAddress, { from: defaultAccount });
+
+  const Votestatus = await contract.methods.getVotingStatus().call({ from: userAddress });
+  console.log("Vote Status:")
+  console.log(Votestatus)
+  return Votestatus;
+}
+
 async function VoteCounts() {
   const accounts = await web3.eth.getAccounts();
   const defaultAccount = accounts[0];
@@ -145,9 +162,10 @@ async function endVoting() {
 }
 
 
-// addCandidate('ABC', 'ABC Party',"Vote for me!");
-// startVoting();
-// vote(1,"0x6B6DB76a95026ae33e6E30672F126f957989E3cd");
+addCandidate('ABC', 'ABC Party',"Vote for me!");
+startVoting();
+//vote(1,"0x15194bc9f434882cd8d7B9c5603196c58803fc73");
 // getCandidatesDetails()
+getVotingStatus("0x15194bc9f434882cd8d7B9c5603196c58803fc73")
 
 module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting,VoteCounts};
