@@ -10,7 +10,7 @@
           <th mat-header-cell *matHeaderCellDef>
             Candidate Name
           </th>
-          <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'green-row': i===0}">
+          <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'green-row': candidates[0]['candidateVotes']===element.candidateVotes}">
             {{element.candidateName}} </td>
         </ng-container>
 
@@ -19,7 +19,7 @@
           <th mat-header-cell *matHeaderCellDef>
             Candidate Party
           </th>
-          <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'green-row': i===0}">
+          <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'green-row': candidates[0]['candidateVotes']===element.candidateVotes}">
             {{element.candidateParty}} </td>
         </ng-container>
 
@@ -28,7 +28,7 @@
           <th mat-header-cell *matHeaderCellDef>
             Candidate Text
           </th>
-          <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'green-row': i===0}">
+          <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'green-row': candidates[0]['candidateVotes']===element.candidateVotes}">
             {{element.candidateText}} </td>
         </ng-container>
 
@@ -36,9 +36,9 @@
         <!-- Note Column -->
         <ng-container matColumnDef="candidateVotes">
           <th mat-header-cell *matHeaderCellDef>
-            Candidate Text
+            Total Votes
           </th>
-          <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'green-row': i===0}">
+          <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'green-row': candidates[0]['candidateVotes']===element.candidateVotes}">
             {{element.candidateVotes}} </td>
         </ng-container>
 

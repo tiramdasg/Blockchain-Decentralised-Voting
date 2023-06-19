@@ -19,15 +19,17 @@ export class AdminSetCampaignComponent implements OnInit {
   showtable: boolean = false;
   hasCampaignstarted: boolean = false;
   displayedColumns: string[] = ['candidateName', 'candidateParty', 'candidateText'];
+  numOfCandidates: number = 0;
+  candidateNames: string = '';
 
   @ViewChild(MatTable) table!: MatTable<any>;
 
   constructor(private router: Router, private fb: FormBuilder, private apiservice: ApiService, private databaseService: DbnodeService, private sb: MatSnackBar) {
     this.setupform = this.fb.group({
       campName: [''/*, [Validators.required, Validators.pattern('^[a-zA-Z,]*$')]*/],
-      candidateName: ['', [Validators.required, Validators.pattern('^[a-zA-Z,]*$')]],
-      candidateParty: ['', [Validators.required, Validators.pattern('^[a-zA-Z,]*$')]],
-      candidateText: ['', [Validators.required, Validators.pattern('^[a-zA-Z,]*$')]],
+      candidateName: ['', [Validators.required, Validators.pattern('^[a-zA-Z, !-]*$')]],
+      candidateParty: ['', [Validators.required, Validators.pattern('^[a-zA-Z, !-]*$')]],
+      candidateText: ['', [Validators.required, Validators.pattern('^[a-zA-Z, !-]*$')]],
     });
   }
 
@@ -169,6 +171,7 @@ export class AdminSetCampaignComponent implements OnInit {
         });
       }
     });
+    this.candidateNames = this.candidates.map(item => item['candidateName']).join(', ');
   }
 
   startCampaign() {
@@ -195,6 +198,7 @@ export class AdminSetCampaignComponent implements OnInit {
         });
       }
     });
+    this.setup = !this.setup; // to make the form disappear after starting campaign
   }
 
   stopCampaign() {
@@ -220,9 +224,15 @@ export class AdminSetCampaignComponent implements OnInit {
         });
       }
     });
+
+    // add backend or web3 code here for reset
   }
 
   getResults() {
     this.router.navigate(['/admin-get-results']);
+  }
+
+  reset() {
+    this.setupform.reset(); // only form reset, no need to save data for next campaign
   }
 }

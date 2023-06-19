@@ -11,6 +11,19 @@ button {
     margin-top: 10px;
 }
 
+.button-secondary {
+    color: black;
+    background-color: white;
+    border-color: #068d9d;
+    border: 2px solid;
+}
+
+.button-secondary:hover{
+    background-color: white;
+    color: #ed6a5a;
+    border: 3px solid #ed6a5a;
+}
+
 .padding-end{
     padding-bottom: 20%;
 }

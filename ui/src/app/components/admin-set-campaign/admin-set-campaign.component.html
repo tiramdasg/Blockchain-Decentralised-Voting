@@ -9,19 +9,19 @@
           </span>
         </p>
         <p class="display-6" *ngIf="!setup">Setup Campaign</p>
-
       </div>
 
       <mat-accordion multi *ngIf="setup" style="padding-top: 10px">
 
         <mat-expansion-panel [expanded]="true">
           <mat-expansion-panel-header>
-            <mat-panel-title> Campaign 2 </mat-panel-title>
+            <mat-panel-title> Active Campaign </mat-panel-title>
             <mat-panel-description style="color: #a5b452">
               <strong>Active</strong>
             </mat-panel-description>
           </mat-expansion-panel-header>
-          <p><strong>No of Candidates</strong>: 4</p>
+          <p><strong>No of Candidates</strong>: {{numOfCandidates}}</p>
+          <p><strong>Candidates</strong>: {{candidateNames}}</p>
           <div class="list-inline">
             <button type="button" (click)="stopCampaign()" [disabled]="!hasCampaignstarted" class="btn btn-md fw-bold mb-2 list-inline-item">
               Stop
@@ -38,7 +38,7 @@
       </mat-accordion>
 
       <form [formGroup]="setupform" (ngSubmit)="startCampaign()" *ngIf="!setup">
-        <div class="col-lg-6 col-md-6">
+        <!-- <div class="col-lg-6 col-md-6"> -->
           <!-- <mat-form-field appearance="outline" class="col-md-12 col-lg-12">
             <mat-label>Campaign Name</mat-label>
             <input matInput type="text" id="campName" placeholder="E.g. State Campaign" formControlName="campName" />
@@ -46,18 +46,7 @@
               This field is required!
             </mat-error>
           </mat-form-field> -->
-        </div>
-        <!-- <div class="col-lg-6 col-md-6">
-          <mat-form-field appearance="outline" class="col-md-12 col-lg-12">
-            <mat-label>Candidates</mat-label>
-            <mat-select  id="candidates" placeholder="Select" formControlName="candidates" multiple>
-              <mat-option *ngFor="let candidate of candidates" [value]="candidate">{{candidate}}</mat-option>
-            </mat-select>
-            <mat-error class="error-message" *ngIf="setupform.get('candidates')?.invalid">
-              This field is required!
-            </mat-error>
-          </mat-form-field>
-        </div> -->
+        <!-- </div> -->
         <div class="col-lg-6 col-md-6">
           Add Candidates
         </div>
@@ -132,10 +121,13 @@
           </table>
         </div>
 
-        <div class="d-grid col-lg-6 col-md-6 padding-end">
-          <!-- <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" type="submit"
-            [disabled]="setupform.invalid">Start Campaign</button> -->
-          <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" [disabled]="hasCampaignstarted" type="submit">Start Campaign</button>
+        <div class="list-inline padding-end">
+          <button mat-raised-button class="btn col-lg-4 col-md-4 btn-lg btn-login fw-bold mb-2 list-inline-item" [disabled]="hasCampaignstarted" type="submit">
+            Start Campaign
+          </button>
+          <button mat-raised-button class="btn col-lg-2 col-md-2 btn-lg btn-login fw-bold mb-2 button-secondary list-inline-item" (click)="reset()">
+            Reset
+          </button>
         </div>
       </form>
     </div>

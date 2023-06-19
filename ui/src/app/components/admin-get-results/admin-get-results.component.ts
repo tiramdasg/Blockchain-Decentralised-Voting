@@ -83,7 +83,8 @@ export class AdminGetResultsComponent implements OnInit {
            'candidateText': 'Vote for free coffee!', 
            'candidateVotes':'15'
           },
-        ]; */
+        ];
+      */
 
     this.sortTableData('candidateVotes');
   }
