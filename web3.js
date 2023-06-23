@@ -193,8 +193,8 @@ async function resetVoting(addresses) {
 
 addCandidate('dfd', 'ABC Party',"Vote for me!");
 startVoting();
-vote(1,"0xAe521FA639AE4197AE939370ac1f45f561aC019C");
- //getCandidatesDetails()
+//vote(1,"0x048c06a32c8f64B5278fD78a1D271Aa85704ea7A");
+ getCandidatesDetails()
 //getVotingStatus("0x15194bc9f434882cd8d7B9c5603196c58803fc73")
 //resetContract()
 //resetUserVotingStatus()
@@ -210,4 +210,5 @@ vote(1,"0xAe521FA639AE4197AE939370ac1f45f561aC019C");
 //   '0x4227bBcEA68144D0939497D7EEB8e819aB752291',
 //   '0x048c06a32c8f64B5278fD78a1D271Aa85704ea7A'
 // ])
+VoteCounts()
 module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting,VoteCounts,getVotingStatus};

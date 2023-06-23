@@ -101,6 +101,9 @@ contract Voting {
     function resetUser(address user) public Admin {
         users[user] = false;
         startVote = false;
+        for (uint i = 1; i <= candidateCount; i++) {
+            candidatesInfo[i].voteCount = 0;
+        }
     }
 
 }
