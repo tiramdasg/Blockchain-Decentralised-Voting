@@ -39,7 +39,7 @@ contract Voting {
     event candidateAdded(uint id,string name,string party,string info,uint voteCount);
 
     function addCandidate(string memory _name,string memory _party,string memory _info) public Admin{
-        incrementCount();
+        candidateCount +=1;
         candidatesInfo[candidateCount] = Candidate({id:candidateCount, name: _name,party : _party,info : _info, voteCount: 0 });
         emit candidateAdded(candidateCount, _name, _party,_info, 0);    
         candidates.push(Candidate(candidateCount,_name, _party,_info,0));
@@ -59,16 +59,13 @@ contract Voting {
         
         return (candidateNames, candidateParties,candidatemessage);
     }
-    function incrementCount() internal{
-        candidateCount +=1;
-    }
+
     function startVoting() public Admin {
         startVote = true;
         endVote = false;
     }
     function endVoting() public  Admin{
         endVote = true;
-        startVote = false;
     }
 
     function hasVotingStarted() public view returns (bool) {
@@ -91,7 +88,7 @@ contract Voting {
         return users[msg.sender];
     }
 
-    function getVoteCounts() public view returns (uint[] memory) {
+    function getVoteCounts() public view Admin returns (uint[] memory) {
         uint[] memory voteCounts = new uint[](candidateCount);
         
         for (uint i = 1; i <= candidateCount; i++) {
@@ -99,28 +96,11 @@ contract Voting {
     }
     
     return voteCounts;
-}
+    }
 
-    function resetUser() public {
-        
-        users[msg.sender] = false; // Reset user's voting status to false
-        //candidateCount = 0;
-        //startVote = false;
-        //endVote = false;
-
-        //for (uint i = 0; i < candidates.length; i++) {
-        //    delete candidates[i];
-        //}
-
-        //for (uint j = 1; j <= candidateCount; j++) {
-        //    delete candidatesInfo[j];
-        //}
-
-        //address[] memory userAddresses = new address[](candidateCount);
-        //for (uint k = 0; k < userAddresses.length; k++) {
-        //    delete users[userAddresses[k]];
-        //}
-        //delete candidates;
+    function resetUser(address user) public Admin {
+        users[user] = false;
+        startVote = false;
     }
 
 }

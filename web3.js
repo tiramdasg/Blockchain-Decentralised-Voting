@@ -161,7 +161,7 @@ async function endVoting() {
   return endTx.transactionHash;
 }
 
-async function resetUserVotingStatus() {
+async function resetVoting(addresses) {
   const accounts = await getAccountList();
   const defaultAccount = accounts[0];
 
@@ -170,9 +170,14 @@ async function resetUserVotingStatus() {
   const contractAddress = deployedNetwork.address;
   const contract = new web3.eth.Contract(contractAbi, contractAddress);
 
-  const resetPromises = accounts.map(async (account) => {
-    const resetTx = await contract.methods.resetUser().send({ from: account, gas: '3000000' });
-    console.log('Reset transaction hash:', resetTx.transactionHash);
+  const admin = await contract.methods.getAdmin().call();
+  if (defaultAccount !== admin) {
+    throw new Error('Only the admin can reset the voting status');
+  }
+
+  const resetPromises = addresses.map(async (address) => {
+    const resetTx = await contract.methods.resetUser(address).send({ from: defaultAccount, gas: '3000000' });
+    console.log(`Reset transaction hash for address ${address}:`, resetTx.transactionHash);
     return resetTx.transactionHash;
   });
 
@@ -186,11 +191,23 @@ async function resetUserVotingStatus() {
   }
 }
 
-//addCandidate('dfd', 'ABC Party',"Vote for me!");
-//startVoting();
-vote(1,"0x83bd9320A85416FaEBcfEf0BA7dAb33fcc49a2A8");
+addCandidate('dfd', 'ABC Party',"Vote for me!");
+startVoting();
+vote(1,"0xAe521FA639AE4197AE939370ac1f45f561aC019C");
  //getCandidatesDetails()
 //getVotingStatus("0x15194bc9f434882cd8d7B9c5603196c58803fc73")
 //resetContract()
 //resetUserVotingStatus()
+// resetVoting([
+//   '0x271146B2C939147857b9ca4E1D1d2B13e570A20c',
+//   '0xE4F99AA806D593c3Cf5d34bE8737f8c5EA1B897F',
+//   '0x83E05EC7E11100ffc34a79E9C820e4c1B8B1c73E',
+//   '0x492D889a62f5d7c5b073F2554482C04da22EE63d',
+//   '0x23Ba9CDA21024D6c377192803c380aB228271CB8',
+//   '0xF7E3c0A6a1a92F29FF57303E359391A66FDe11F6',
+//   '0x8De3D6eC5426A771aFc272F42aC6688A1d9EB50b',
+//   '0xAe521FA639AE4197AE939370ac1f45f561aC019C',
+//   '0x4227bBcEA68144D0939497D7EEB8e819aB752291',
+//   '0x048c06a32c8f64B5278fD78a1D271Aa85704ea7A'
+// ])
 module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting,VoteCounts,getVotingStatus};
