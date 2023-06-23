@@ -161,11 +161,36 @@ async function endVoting() {
   return endTx.transactionHash;
 }
 
+async function resetUserVotingStatus() {
+  const accounts = await getAccountList();
+  const defaultAccount = accounts[0];
 
-//addCandidate('ABC', 'ABC Party',"Vote for me!");
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = contractJson.networks[networkId];
+  const contractAddress = deployedNetwork.address;
+  const contract = new web3.eth.Contract(contractAbi, contractAddress);
+
+  const resetPromises = accounts.map(async (account) => {
+    const resetTx = await contract.methods.resetUser().send({ from: account, gas: '3000000' });
+    console.log('Reset transaction hash:', resetTx.transactionHash);
+    return resetTx.transactionHash;
+  });
+
+  try {
+    const resetTransactionHashes = await Promise.all(resetPromises);
+    console.log('Reset transaction hashes:', resetTransactionHashes);
+    return resetTransactionHashes;
+  } catch (error) {
+    console.error('Error resetting voting status:', error);
+    return error.message;
+  }
+}
+
+//addCandidate('dfd', 'ABC Party',"Vote for me!");
 //startVoting();
-//vote(1,"0x15194bc9f434882cd8d7B9c5603196c58803fc73");
-// getCandidatesDetails()
+vote(1,"0x83bd9320A85416FaEBcfEf0BA7dAb33fcc49a2A8");
+ //getCandidatesDetails()
 //getVotingStatus("0x15194bc9f434882cd8d7B9c5603196c58803fc73")
-
+//resetContract()
+//resetUserVotingStatus()
 module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting,VoteCounts,getVotingStatus};

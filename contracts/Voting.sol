@@ -72,7 +72,7 @@ contract Voting {
     }
 
     function hasVotingStarted() public view returns (bool) {
-    return startVote;
+        return startVote;
     }
 
     event userVoted(uint candidateId);
@@ -92,14 +92,35 @@ contract Voting {
     }
 
     function getVoteCounts() public view returns (uint[] memory) {
-    uint[] memory voteCounts = new uint[](candidateCount);
-    
-    for (uint i = 1; i <= candidateCount; i++) {
-        voteCounts[i-1] = candidatesInfo[i].voteCount;
+        uint[] memory voteCounts = new uint[](candidateCount);
+        
+        for (uint i = 1; i <= candidateCount; i++) {
+            voteCounts[i-1] = candidatesInfo[i].voteCount;
     }
     
     return voteCounts;
 }
 
+    function resetUser() public {
+        
+        users[msg.sender] = false; // Reset user's voting status to false
+        //candidateCount = 0;
+        //startVote = false;
+        //endVote = false;
+
+        //for (uint i = 0; i < candidates.length; i++) {
+        //    delete candidates[i];
+        //}
+
+        //for (uint j = 1; j <= candidateCount; j++) {
+        //    delete candidatesInfo[j];
+        //}
+
+        //address[] memory userAddresses = new address[](candidateCount);
+        //for (uint k = 0; k < userAddresses.length; k++) {
+        //    delete users[userAddresses[k]];
+        //}
+        //delete candidates;
+    }
 
 }
