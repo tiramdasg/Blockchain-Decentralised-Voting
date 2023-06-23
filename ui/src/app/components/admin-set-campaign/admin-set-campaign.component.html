@@ -32,6 +32,9 @@
             <button type="button" (click)="getResults()" [disabled]="hasCampaignstarted" class="btn btn-md fw-bold mb-2 list-inline-item">
               Get Results
             </button>
+            <button type="button" (click)="reset()" [disabled]="hasCampaignstarted" class="btn col-lg-2 col-md-2 btn-lg btn-login fw-bold mb-2 button-secondary list-inline-item">
+              Reset
+            </button>
           </div>
         </mat-expansion-panel>
 
@@ -124,9 +127,6 @@
         <div class="list-inline padding-end">
           <button mat-raised-button class="btn col-lg-4 col-md-4 btn-lg btn-login fw-bold mb-2 list-inline-item" [disabled]="hasCampaignstarted" type="submit">
             Start Campaign
-          </button>
-          <button mat-raised-button class="btn col-lg-2 col-md-2 btn-lg btn-login fw-bold mb-2 button-secondary list-inline-item" (click)="reset()">
-            Reset
           </button>
         </div>
       </form>

@@ -234,5 +234,6 @@ export class AdminSetCampaignComponent implements OnInit {
 
   reset() {
     this.setupform.reset(); // only form reset, no need to save data for next campaign
+    // add backend or web3 code here for reset
   }
 }
