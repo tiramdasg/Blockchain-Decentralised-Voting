@@ -13,7 +13,7 @@ const Voter = function (voter) {
 
 Voter.add = async (newVoter) => {
   return new Promise((resolve, reject) => {
-    sql.query("INSERT INTO VOTERS SET ?", [newVoter], (err, res) => {
+    sql.query("INSERT INTO voters SET ?", [newVoter], (err, res) => {
       if (err) {
         console.log("error: ", err);
         reject(err);
@@ -27,7 +27,7 @@ Voter.add = async (newVoter) => {
 };
 
 /*Voter.add = (newVoter, result) => {
-  sql.query("INSERT INTO VOTERS SET ?", [newVoter], (err, res) => {
+  sql.query("INSERT INTO voters SET ?", [newVoter], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -41,7 +41,7 @@ Voter.add = async (newVoter) => {
 
 Voter.checkKey = async (key) => {
   return new Promise((resolve, reject) => {
-    sql.query("SELECT public_key FROM VOTERS WHERE public_key = ?", [key], (err, res) => {
+    sql.query("SELECT public_key FROM voters WHERE public_key = ?", [key], (err, res) => {
       if (err) {
         console.log("error: ", err);
         reject(err);
@@ -60,7 +60,7 @@ Voter.checkKey = async (key) => {
 
 Voter.checkUser = async (userId) => {
   return new Promise((resolve, reject) => {
-    sql.query("SELECT * FROM VOTERS WHERE VoterID = ?", [userId], (err, res) => {
+    sql.query("SELECT * FROM voters WHERE VoterID = ?", [userId], (err, res) => {
       if (err) {
         console.log("error: ", err);
         reject(err);
@@ -79,7 +79,7 @@ Voter.checkUser = async (userId) => {
 
 /*
 Voter.checkKey = (key, result) => {
-  sql.query("SELECT public_key FROM VOTERS WHERE public_key = ?",
+  sql.query("SELECT public_key FROM voters WHERE public_key = ?",
     [key], (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -98,7 +98,7 @@ Voter.checkKey = (key, result) => {
 
 Voter.checkCredentials = (id, password, result) => {
   //console.log(id+" "+ password)
-  sql.query("SELECT * FROM VOTERS WHERE VoterID = ? AND Password = ?",
+  sql.query("SELECT * FROM voters WHERE VoterID = ? AND Password = ?",
     [id, password], (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -118,7 +118,7 @@ Voter.checkCredentials = (id, password, result) => {
 
 Voter.getKey = (VoterID, result) => {
   sql.query(
-    "SELECT PUBLIC_KEY FROM VOTERS WHERE VoterID = ?",
+    "SELECT PUBLIC_KEY FROM voters WHERE VoterID = ?",
     [VoterID],
     (err, res) => {
       if (err) {

@@ -1,0 +1,23 @@
+FROM node:18
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm install -g truffle
+
+RUN npm install -g ganache-cli
+
+RUN npm install mysql@2.18.1
+
+ENV PORT=8080
+
+ENV HOSTDB=db
+
+EXPOSE 8080
+
+CMD npm start

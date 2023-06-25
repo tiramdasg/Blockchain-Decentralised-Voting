@@ -1,0 +1,15 @@
+FROM mysql:latest
+
+ENV MYSQL_ROOT_PASSWORD=Pass@1234
+
+COPY init.sql /docker-entrypoint-initdb.d/
+
+RUN echo '[mysqld]' >> /etc/mysql/my.cnf
+
+RUN echo 'default_authentication_plugin=mysql_native_password' >> /etc/mysql/my.cnf
+
+ENV PORT=8080
+
+EXPOSE 8080
+
+CMD ["mysqld"]

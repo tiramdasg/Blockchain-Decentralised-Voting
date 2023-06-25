@@ -1,5 +1,5 @@
 const Voter = require("../models/voters.model.js");
-const web3 = require("../../../web3.js");
+const web3 = require("../../web3.js");
 //const voterweb3 = require("../Web3/voteweb3.js");
 // Create and Save a new Voter
 exports.add = async (req, res) => {

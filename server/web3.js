@@ -1,7 +1,7 @@
 const Web3 = require('web3');
 const contractJson = require('./build/contracts/Voting.json');
 const contractAbi = contractJson.abi;
-const providerUrl = 'HTTP://127.0.0.1:7545';
+const providerUrl = 'HTTP://127.0.0.1:8545';
 const web3 = new Web3(providerUrl);
 
 async function getAccountList() {
@@ -191,10 +191,10 @@ async function resetVoting(addresses) {
   }
 }
 
-addCandidate('dfd', 'ABC Party',"Vote for me!");
-startVoting();
+//addCandidate('dfd', 'ABC Party',"Vote for me!");
+//startVoting();
 //vote(1,"0x048c06a32c8f64B5278fD78a1D271Aa85704ea7A");
- getCandidatesDetails()
+//getCandidatesDetails()
 //getVotingStatus("0x15194bc9f434882cd8d7B9c5603196c58803fc73")
 //resetContract()
 //resetUserVotingStatus()
@@ -210,5 +210,5 @@ startVoting();
 //   '0x4227bBcEA68144D0939497D7EEB8e819aB752291',
 //   '0x048c06a32c8f64B5278fD78a1D271Aa85704ea7A'
 // ])
-VoteCounts()
+//VoteCounts()
 module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting,VoteCounts,getVotingStatus};

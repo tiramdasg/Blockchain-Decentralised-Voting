@@ -1,7 +1,6 @@
 import { OnDestroy, Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 // import  vote  from 'D:/TUHH_ICS/Sem3_SS23/Advanced Internet Computing/PBL/UI-test/voteweb3.js'
-import { VoteWeb3Component } from './vote.web3';
 import { ApiService } from 'src/app/api.service';
 import { DbnodeService } from 'src/app/dbnode.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -91,7 +90,7 @@ export class VoteComponent implements OnInit ,OnDestroy {
     this.selectedCandidate = new Set();
   }
 
-  web3 = new VoteWeb3Component()
+  /* web3 = new VoteWeb3Component() */
   castVote() {
     let x;
     this.selectedCandidate.forEach((element) => {
