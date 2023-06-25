@@ -1,8 +1,8 @@
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Pass@1234';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY ${DB_PASSWORD};
 
 flush privileges;
 
-CREATE DATABASE dbtest1;
+CREATE DATABASE ${DB_NAME};
 
 USE dbtest1;
 
