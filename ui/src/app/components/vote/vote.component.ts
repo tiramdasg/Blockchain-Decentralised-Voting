@@ -48,6 +48,7 @@ export class VoteComponent implements OnInit ,OnDestroy {
   }
 
   ngOnInit(): void {
+    CANDIDATE_LIST.splice(0, CANDIDATE_LIST.length);
     this.databaseService.getAllCandidates().subscribe({
       next: (response: any) => {
         console.log(response.message);

@@ -66,6 +66,7 @@ contract Voting {
     }
     function endVoting() public  Admin{
         endVote = true;
+        startVote = false;
     }
 
     function hasVotingStarted() public view returns (bool) {
