@@ -211,4 +211,5 @@ async function resetVoting(addresses) {
 //   '0x048c06a32c8f64B5278fD78a1D271Aa85704ea7A'
 // ])
 //VoteCounts()
-module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting,VoteCounts,getVotingStatus};
+//getCandidateCount()
+module.exports = {getAccountList,addCandidate,vote,getCandidatesDetails,startVoting,hasVotingStarted,endVoting,VoteCounts,getVotingStatus,getCandidateCount,resetVoting};

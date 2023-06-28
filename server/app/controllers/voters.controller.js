@@ -2,6 +2,19 @@ const Voter = require("../models/voters.model.js");
 const web3 = require("../../web3.js");
 //const voterweb3 = require("../Web3/voteweb3.js");
 // Create and Save a new Voter
+
+exports.adminAccountadd = async () => {
+  try {
+    const accountList = await web3.getAccountList();
+
+    return accountList;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+
 exports.add = async (req, res) => {
   try {
     // Validate request
@@ -216,6 +229,7 @@ exports.admin = async (req, res) => {
 
 
       if (admin_check == 1) {
+        console.log("Handle ID got is: "+ req.body.handleId)
         if (req.body.handleId == "addcandidate") {
           const response = await web3.addCandidate(req.body.candidateName, req.body.candidateParty, req.body.candidateText);
           console.log("Output is: " + response);
@@ -236,6 +250,35 @@ exports.admin = async (req, res) => {
           const response = await web3.hasVotingStarted();
           console.log("Output in checkcampaignstatus: " + response);
           res.send({ "message": response })
+        }
+        else if (req.body.handleId == "candidatesCount") {
+          const response = await web3.getCandidateCount();
+          console.log("Output in candidatesCount: " + response);
+          res.send({ "message": response })
+        }
+        else if (req.body.handleId == "resetCampaign") {
+          await Voter.getKeys()
+          .then(async data => {
+            // Key found
+            console.log("found keys: ", data);
+            const response = await web3.resetVoting(data.map(row => row.public_key));
+            console.log("Output in resetCampaign: " + response);
+            if (response[0].includes("0x"))
+              res.send({ "message": "The campaign has been reset." });
+            else
+              res.send({ "message": response })
+          })
+          .catch(err => {
+            if (err.kind === "not_found") {
+              console.log("No keys available");
+              res.send({ "message": "The campaign has been reset." });
+            } else {
+              console.log("Error in else " + err);
+              res.status(500).send({
+                message: "Error retrieving keys from DB "
+              });
+            }
+          });
         }
         else if (req.body.handleId == "stopCampaign") {
           const response = await web3.endVoting();

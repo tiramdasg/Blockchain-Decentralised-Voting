@@ -77,24 +77,25 @@ Voter.checkUser = async (userId) => {
   });
 };
 
-/*
-Voter.checkKey = (key, result) => {
-  sql.query("SELECT public_key FROM voters WHERE public_key = ?",
-    [key], (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
 
-      if (res.length) {
-        console.log("found key: ", res[0]);
-        result(null, res[0]);
-        return;
-      }
-      result({ kind: "not_found" }, null);
-    });
-}; */
+Voter.getKeys = async () => {
+  return new Promise((resolve, reject) => {
+  sql.query("SELECT public_key FROM voters WHERE public_key IS NOT NULL AND VoterID NOT IN ('12345')", (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      reject(err);
+      return;
+    }
+
+    if (res.length) {
+      console.log("Output in getKeys: "+res)
+      resolve(res);
+    } else {
+      reject({ kind: "not_found" });
+    }
+  });
+});
+};
 
 Voter.checkCredentials = (id, password, result) => {
   //console.log(id+" "+ password)

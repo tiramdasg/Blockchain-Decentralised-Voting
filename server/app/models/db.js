@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const dbConfig = require("../config/db.config.js");
+const Voter = require("../controllers/voters.controller.js");
 
 const host = process.env.HOSTDB || dbConfig.HOST;
 // Create a connection to the database
@@ -16,7 +17,25 @@ try {
 connection.connect(error => {
   if (error) throw error;
   console.log("Successfully connected to the database.");
-  connection.query("CREATE TABLE IF NOT EXISTS voters (`VoterID` int NOT NULL, `VoterName` varchar(45) NOT NULL, `Email` varchar(45) NOT NULL, `Password` varchar(100) DEFAULT NULL, `isAdmin` tinyint(1) DEFAULT NULL, `public_key` varchar(50) NOT NULL, `isAprroved` tinyint(1) DEFAULT NULL, PRIMARY KEY (`VoterID`))")
+  connection.query("DELETE FROM voters WHERE VoterID NOT IN ('12345')");
+  Voter.adminAccountadd()
+  .then(accountList => {
+    console.log(accountList);
+    connection.query(
+      "UPDATE voters set public_key = ? WHERE VoterID = '12345'", 
+      [accountList[0]], 
+      (error, results) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Update successful');
+        }
+      }
+    );
+  })
+  .catch(error => {
+    console.error(error);
+  });
 });
 }
 catch(err) {

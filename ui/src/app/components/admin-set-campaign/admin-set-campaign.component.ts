@@ -5,6 +5,7 @@ import { MatTable } from '@angular/material/table';
 import { ApiService } from 'src/app/api.service';
 import { DbnodeService } from 'src/app/dbnode.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { concatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-set-campaign',
@@ -21,8 +22,15 @@ export class AdminSetCampaignComponent implements OnInit {
   displayedColumns: string[] = ['candidateName', 'candidateParty', 'candidateText'];
   numOfCandidates: number = 0;
   candidateNames: string = '';
-
+  setupcampaign = false;
+  resetForm = false;
+  tostartcampaign = false;
+  votingStopped = true;
+  getResult = false;
+  resetEnable = false;
+  startEnable = true;
   @ViewChild(MatTable) table!: MatTable<any>;
+
 
   constructor(private router: Router, private fb: FormBuilder, private apiservice: ApiService, private databaseService: DbnodeService, private sb: MatSnackBar) {
     this.setupform = this.fb.group({
@@ -34,36 +42,65 @@ export class AdminSetCampaignComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const data = {
+    let data = {
       userId: this.apiservice.getVoterId(),
       handleId: "checkcampaignstatus"
-    }
-    this.databaseService.admin(data).subscribe({
-      next: (response: any) => {
-        console.log(response)
+    };
+  
+    this.databaseService.admin(data).pipe(
+      concatMap((response: any) => {
+        console.log(response);
         if (response.message === false) {
           this.hasCampaignstarted = false;
-          response.message = "Campaign currently INACTIVE"
-        }
-        else if (response.message === true) {
+          response.message = "Campaign currently INACTIVE";
+          this.setup = true;
+          this.votingStopped = true;
+        } else if (response.message === true) {
           this.hasCampaignstarted = true;
           response.message = "Campaign currently ACTIVE";
           this.setup = true;
+          this.votingStopped = false;
+          this.startEnable = false;
         }
         this.sb.open(response.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
           duration: 5000
         });
-      },
-      error: (error: any) => {
-        console.log(error.error.message);
-        this.sb.open(error.error.message, '', {
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          duration: 5000
-        });
+  
+
+        return this.databaseService.getAllCandidates();
+      })
+    ).subscribe((response: any) => {
+      this.candidateNames='';
+      console.log(response.message[0].length);
+      this.numOfCandidates = response.message[0].length;
+      for (var i = 0; i < response.message[0].length; i++) {
+        this.candidateNames += response.message[0][i]+ ', ';
+
       }
+      this.candidateNames = this.candidateNames.slice(0, -2);
+      if (response.message[0].length === 0 && this.hasCampaignstarted === false) {
+        this.resetForm = true;
+        this.startEnable = true;
+
+      }
+      else if (response.message[0].length > 1 && this.hasCampaignstarted === false) {
+        this.resetEnable = true;
+        this.getResult = true;
+        this.startEnable = false;
+      }
+      else {
+        this.resetForm = false;
+        this.startEnable = false;
+      }
+    }, (error: any) => {
+      console.log(error.error.message);
+      this.sb.open(error.error.message, '', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 5000
+      });
     });
   }
 
@@ -93,16 +130,23 @@ export class AdminSetCampaignComponent implements OnInit {
           verticalPosition: 'top',
           duration: 5000
         });
+        this.candidates.splice(0, this.candidates.length);
         this.databaseService.getAllCandidates().subscribe({
           next: (response: any) => {
             console.log(response.message);
             this.candidates = [];
+            this.numOfCandidates= response.message[0].length;
+            this.candidateNames='';
             for (var i = 0; i < response.message[0].length; i++) {
+              this.candidateNames += response.message[0][i]+ ', ';
               this.dummy = {
                 'candidateName': response.message[0][i],
                 'candidateParty': response.message[1][i],
                 'candidateText': response.message[2][i]
               };
+              this.candidateNames = this.candidateNames.slice(0, -2);
+              if (response.message[0].length > 1)
+                this.tostartcampaign = true;
               console.log(this.dummy)
               this.candidates.push(this.dummy);
               this.showtable = true;
@@ -141,16 +185,23 @@ export class AdminSetCampaignComponent implements OnInit {
   }
 
   setupCampaign() {
-    this.setup = !this.setup;
+    this.candidates.splice(0, this.candidates.length);
     this.databaseService.getAllCandidates().subscribe({
       next: (response: any) => {
         console.log(response.message);
+        this.setup = false;
+        this.setupcampaign = true;
+        this.candidateNames='';
         for (var i = 0; i < response.message[0].length; i++) {
+          this.candidateNames += response.message[0][i]+ ', ';
           this.dummy = {
             'candidateName': response.message[0][i],
             'candidateParty': response.message[1][i],
             'candidateText': response.message[2][i]
-          };
+          }
+          this.candidateNames = this.candidateNames.slice(0, -2);
+          if (response.message[0].length > 1)
+            this.tostartcampaign = true;
           console.log(this.dummy)
           this.candidates.push(this.dummy);
           this.showtable = true;
@@ -171,8 +222,9 @@ export class AdminSetCampaignComponent implements OnInit {
         });
       }
     });
-    this.candidateNames = this.candidates.map(item => item['candidateName']).join(', ');
+    //this.candidateNames = this.candidates.map(item => item['candidateName']).join(', ');
   }
+
 
   startCampaign() {
     //this.setup = !this.setup;
@@ -183,6 +235,13 @@ export class AdminSetCampaignComponent implements OnInit {
     this.databaseService.admin(data).subscribe({
       next: (res: any) => {
         this.hasCampaignstarted = true;
+        this.resetForm = false;
+        this.setup = true;
+        this.setupcampaign = false;
+        this.votingStopped = false;
+        this.getResult=false;
+        this.resetEnable = false;
+        this.startEnable = false;
         this.sb.open(res.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -198,7 +257,7 @@ export class AdminSetCampaignComponent implements OnInit {
         });
       }
     });
-    this.setup = !this.setup; // to make the form disappear after starting campaign
+    //this.setup = !this.setup; // to make the form disappear after starting campaign
   }
 
   stopCampaign() {
@@ -209,6 +268,10 @@ export class AdminSetCampaignComponent implements OnInit {
     this.databaseService.admin(data).subscribe({
       next: (res: any) => {
         this.hasCampaignstarted = false;
+        this.resetForm=false;
+        this.votingStopped=true;
+        this.getResult = true;
+        this.resetEnable = true;
         this.sb.open(res.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -233,7 +296,36 @@ export class AdminSetCampaignComponent implements OnInit {
   }
 
   reset() {
-    this.setupform.reset(); // only form reset, no need to save data for next campaign
+    const data = {
+      userId: this.apiservice.getVoterId(),
+      handleId: "resetCampaign"
+    }
+    this.databaseService.admin(data).subscribe({
+      next: (res: any) => {
+        this.hasCampaignstarted = false;
+        this.resetForm=true;
+        this.votingStopped=true;
+        this.getResult = false;
+        this.resetEnable = false;
+        this.startEnable = true;
+        this.candidateNames = '';
+        this.numOfCandidates = 0;
+        this.sb.open(res.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+      },
+      error: (error: any) => {
+        console.log(error.error.message);
+        this.sb.open(error.error.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+      }
+    });
+    //this.setupform.reset(); // only form reset, no need to save data for next campaign
     // add backend or web3 code here for reset
   }
 }

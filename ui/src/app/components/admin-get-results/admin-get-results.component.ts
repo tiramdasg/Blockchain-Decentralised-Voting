@@ -21,11 +21,37 @@ export class AdminGetResultsComponent implements OnInit {
       userId: this.apiservice.getVoterId(),
       handleId: "checkresult"
     }
-    console.log("Data: "+data.userId)
+    console.log("Data: " + data.userId)
     this.databaseService.admin(data).subscribe({
       next: (response: any) => {
         console.log("Result got is:" + response.message)
-        x = response.message
+        x = response.message;
+  
+        this.databaseService.getAllCandidates().subscribe({
+          next: (response: any) => {
+            console.log(response.message);
+            this.candidates = [];
+            const candidatesLength = response.message[0].length;
+            for (var i = 0; i < candidatesLength; i++) {
+              const dummy = {
+                'candidateName': response.message[0][i],
+                'candidateParty': response.message[1][i],
+                'candidateText': response.message[2][i],
+                'candidateVotes': x[i]
+              };
+              console.log(dummy)
+              this.candidates.push(dummy);
+            }
+          },
+          error: (error: any) => {
+            console.log(error.error.message);
+            this.sb.open(error.error.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              duration: 5000
+            });
+          }
+        });
       },
       error: (error: any) => {
         console.log(error.error.message);
@@ -36,56 +62,7 @@ export class AdminGetResultsComponent implements OnInit {
         });
       }
     });
-
-    this.databaseService.getAllCandidates().subscribe({
-      next: (response: any) => {
-        console.log(response.message);
-        this.candidates = [];
-        for (var i = 0; i < response.message[0].length; i++) {
-          this.dummy = {
-            'candidateName': response.message[0][i],
-            'candidateParty': response.message[1][i],
-            'candidateText': response.message[2][i],
-            'candidateVotes': x[i]
-          };
-          console.log(this.dummy)
-          this.candidates.push(this.dummy);
-        }
-      },
-      error: (error: any) => {
-        console.log(error.error.message);
-        this.sb.open(error.error.message, '', {
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          duration: 5000
-        });
-      }
-    });
-
-
-    /*
-        this.candidates = [
-          {
-            'candidateName': 'ABC',
-           'candidateParty': 'ABC Party', 
-           'candidateText': 'Vote for free coffee!', 
-           'candidateVotes':'25'
-          },
-          {
-            'candidateName': 'XYZ',
-           'candidateParty': 'XYZ Party', 
-           'candidateText': 'Vote for free coffee!', 
-           'candidateVotes':'10'
-          },
-          {
-            'candidateName': 'ASDF',
-           'candidateParty': 'ASDF Party', 
-           'candidateText': 'Vote for free coffee!', 
-           'candidateVotes':'15'
-          },
-        ];
-      */
-
+  
     this.sortTableData('candidateVotes');
   }
 
