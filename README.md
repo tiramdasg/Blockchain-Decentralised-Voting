@@ -14,3 +14,6 @@ For docker (production mode) use the following command:
 ```bash
 docker-compose up
 ```
+
+To view the frontend UI, open http://localhost in web browser
+
