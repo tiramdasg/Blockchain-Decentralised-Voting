@@ -19,6 +19,18 @@ export class DbnodeService {
     return this.http.post(`${baseUrl}/${data.VoterID}`,data);
   }
 
+  checkEmail(data: any): Observable<any> {
+    return this.http.post(`${baseUrl}/admin/email`,data);
+  }
+
+  verifyEmail(data: any): Observable<any> {
+    return this.http.post(`${baseUrl}/admin/emailverify`,data);
+  }
+
+  verifyOtp(data: any): Observable<any> {
+    return this.http.post(`${baseUrl}/admin/otpverify`,data);
+  }
+
   add(data: any): Observable<any> {
     return this.http.post(baseUrl, data);
   }

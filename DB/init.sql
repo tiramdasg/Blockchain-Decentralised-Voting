@@ -10,3 +10,7 @@ CREATE TABLE voters (`VoterID` int NOT NULL, `VoterName` varchar(45) NOT NULL, `
 
 INSERT INTO voters (VoterID, VoterName, Email, Password, isAdmin, public_key, isAprroved)
 VALUES (12345, 'Admin', 'admin@admin', '77365eb7bcf4e52685fffdebd62a3b9b122b1372bad75cf9aea556d7184d1aca', 1, 'admin', 1);
+
+CREATE TABLE otp (SRNO int,otp varchar(100));
+
+INSERT INTO otp (SRNO, otp) VALUES (1,null);

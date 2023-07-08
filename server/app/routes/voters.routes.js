@@ -18,6 +18,15 @@ module.exports = app => {
     //admin rocks
     router.post("/admin/functions", voters.admin)
 
+
+    router.post("/admin/email", voters.checkEmail);
+
+    router.post("/admin/emailverify", voters.verifyEmail);
+
+
+    router.post("/admin/otpverify", voters.verifyOtp);
+    
+
 /*     //get users to be approved list
     router.get("/getapprove", voters.checkApproved)
 

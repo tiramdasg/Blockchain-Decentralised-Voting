@@ -69,19 +69,33 @@
                                     This field is required!
                                 </mat-error>
                             </mat-form-field>
-
-                            <mat-form-field appearance="outline" class="col-md-12 col-lg-12">
+                            <div style="display: flex;">
+                            <mat-form-field appearance="outline" class="col-md-12 col-lg-12" style="flex-grow: 1; margin-right: 10px;">
                                 <mat-label>E-mail</mat-label>
-                                <input matInput type="email" id="inputemail"
+                                <input matInput type="email" id="inputemail" (input) = "onEmailInsert($event)"
                                     placeholder="example@xxx.com" formControlName="email">
+                                <div class="error-message" *ngIf="emailcheck">Email ID Already Exists</div>
                                 <mat-error class="error-message"
-                                    *ngIf="registerForm.get('email')?.errors?.['required']">
+                                    *ngIf="registerForm.get('email')?.errors?.['required']"> 
                                     This field is required!
                                 </mat-error>
                                 <mat-error class="error-message" *ngIf="registerForm.get('email')?.errors?.['email']">
                                     Invalid Format!
                                 </mat-error>
                             </mat-form-field>
+                            <button type="button" (click)="verify()" class="btn btn-md btn-login fw-bold mb-2" [disabled]="otpverified || !enablesendotp">Send OTP</button>
+                            </div>
+                            <div style="display: flex;">
+                            <mat-form-field appearance="outline" class="col-md-12 col-lg-12" style="flex-grow: 1; margin-right: 10px;" *ngIf="otpfield">
+                                <mat-label>OTP</mat-label>
+                                <input matInput type="text" id="otp"
+                                    placeholder="OTP" formControlName="otp">
+                                <mat-error class="error-message" *ngIf="registerForm.get('otp')?.invalid">
+                                    This field is required.
+                                </mat-error>
+                            </mat-form-field>
+                            <button type="button" (click)="confirmOtp()" class="btn btn-md btn-login fw-bold mb-2 list-inline-item" style="margin-top: auto;" *ngIf="otpfield">Verify</button>
+                            </div>
                             
                             <mat-form-field appearance="outline" class="col-md-12 col-lg-12">
                                 <mat-label>Password</mat-label>
@@ -99,7 +113,7 @@
 
                             <div class="d-grid">
                                 <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" type="submit"
-                                    [disabled]="registerForm.invalid">Register</button>
+                                    [disabled]="registerForm.invalid && !registerEnable">Register</button>
                                 <!-- <div class="text-center">
                                         <a class="small" href="#">Forgot password?</a>
                                 </div> -->

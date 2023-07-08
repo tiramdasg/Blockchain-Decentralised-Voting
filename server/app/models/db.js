@@ -2,7 +2,7 @@ const mysql = require("mysql");
 const dbConfig = require("../config/db.config.js");
 const Voter = require("../controllers/voters.controller.js");
 
-const host = process.env.HOSTDB || dbConfig.HOST;
+const host = dbConfig.HOST;
 // Create a connection to the database
 const connection = mysql.createConnection({
   host: host,
@@ -12,8 +12,11 @@ const connection = mysql.createConnection({
   database: dbConfig.DB
 });
 
+
+
 // open the MySQL connection
 try {
+  console.log("Host name is: "+dbConfig.HOST)
 connection.connect(error => {
   if (error) throw error;
   console.log("Successfully connected to the database.");

@@ -117,6 +117,28 @@ Voter.checkCredentials = (id, password, result) => {
     });
 };
 
+
+
+Voter.checkEmail = (email, result) => {
+  //console.log(id+" "+ password)
+  sql.query("SELECT * FROM voters WHERE Email = ?",
+    [email], (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        console.log("found voter with email: ", res[0]);
+        result(null, res[0]);
+        return;
+      }
+
+      result({ kind: "not_found" }, null);
+    });
+};
+
 Voter.getKey = (VoterID, result) => {
   sql.query(
     "SELECT PUBLIC_KEY FROM voters WHERE VoterID = ?",
@@ -172,6 +194,41 @@ Voter.approveVoter = async (id, result) => {
     }
   );
 };
+
+Voter.verifyEmail = async (otp, result) => {
+  sql.query("UPDATE otp SET otp = ? WHERE SRNO =1",
+    [otp], (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+
+      result(null, { "message": "OTP updated" });
+    }
+  );
+};
+
+Voter.verifyOtp = (otp, result) => {
+  sql.query("SELECT * FROM otp WHERE SRNO=1", (err, res) => {
+      console.log("Response is " + res)
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        console.log("found otp: ", res[0]);
+        result(null, res[0]);
+        return;
+      }
+
+      result({ kind: "not_found" }, null);
+    });
+};
+
+
 
 
 module.exports = Voter;

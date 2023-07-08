@@ -1,5 +1,10 @@
 const Voter = require("../models/voters.model.js");
 const web3 = require("../../web3.js");
+const db = require("../models/db.js")
+const nodemailer = require('nodemailer');
+var randomstring= require('randomstring');
+var SHA256 = require("crypto-js/sha256");
+var SHA1 = require("crypto-js/sha1");
 //const voterweb3 = require("../Web3/voteweb3.js");
 // Create and Save a new Voter
 
@@ -114,6 +119,135 @@ exports.checkCredentials = async (req, res) => {
       } else 
         res.send(data);
 
+      }
+    });
+  }
+  catch (err) {
+    console.log(err)
+    res.status(500).send({
+      message: err.message || "Some error occurred while adding the Voter"
+    });
+  }
+};
+
+// check email
+exports.checkEmail = async (req, res) => {
+  try {
+
+    Voter.checkEmail(req.body.email, async (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.send({
+            message: `Good`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error retrieving Voter with id " + req.params.id
+          });
+        }
+      } else {
+        res.status(400).send({
+          message: `Already exists`
+        });
+      }
+    });
+  }
+  catch (err) {
+    console.log(err)
+    res.status(500).send({
+      message: err.message || "Some error occurred while adding the Voter"
+    });
+  }
+};
+
+
+
+
+// verify email
+exports.verifyEmail = async (req, res) => {
+  try {
+
+    const transport=nodemailer.createTransport({
+      host:'smtp.gmail.com',
+      port:587,
+      secure:false,
+      requireTLS:true, 
+      auth:{
+          user:'aicblockchainproject@gmail.com',
+          pass:'wggbzofddkhthtbk'
+      }
+    });
+
+    const randomS=randomstring.generate({
+      length: 6,
+      charset: 'numeric'
+  });
+  
+  var mailsent = {
+      from: 'aicblockchainproject@gmail.com',
+      to: req.body.email,
+      subject: 'Voting Verification',
+      text: 'Your verification code is ' +randomS 
+  };
+
+
+    transport.sendMail(mailsent, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent to: '+mailsent.to);
+      }
+  });
+  console.log("Exact otp is: "+ randomS.toString())
+  const otpencryp = SHA256(randomS.toString())
+  console.log("Encrypted otp is: "+ otpencryp.toString())
+  await Voter.verifyEmail(otpencryp.toString(), (err, data) => {
+    if (err) {
+      res.status(500).send({
+        message: "Error updating the otp in database"
+      });
+    } else  {
+      console.log("Sending data!")
+      res.send(data);}
+  });
+
+  }
+  catch (err) {
+    console.log(err)
+    res.status(500).send({
+      message: err.message || "Some error occurred while adding the Voter"
+    });
+  } 
+};
+
+
+
+exports.verifyOtp = async (req, res) => {
+  try {
+    console.log("OTP got is: " + req.body.otp + " and " + req.body)
+    Voter.verifyOtp(req.body.otp, async (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Invalid OTP`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error checking OTP verification " + req.params.id
+          });
+        }
+      } else {
+        console.log("OTP from database is: "+ data.otp)
+        console.log("OTP from frontend is: "+ req.body.otp)
+        if(data.otp == req.body.otp) {
+          res.send({
+            message: `OTP verified`
+          });
+        } else {
+          res.status(500).send({
+            message: `Invalid OTP`
+          });
+        }
       }
     });
   }

@@ -6,6 +6,7 @@ import { DbnodeService } from 'src/app/dbnode.service';
 import { ApiService } from 'src/app/api.service';
 import * as sha256 from 'crypto-js/sha256';
 import * as  sha1 from 'crypto-js/sha1';
+import { enc } from 'crypto-js';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,12 @@ export class LoginComponent implements OnInit {
   hide = true;
   loginForm: FormGroup;
   registerForm: FormGroup;
+  emailcheck: any; 
+  otpfield = false;
+  registerEnable=false;
+  otpverified=false;
+  enablesendotp=false;
+  
   ngOnInit(): void {
     sessionStorage.setItem('role', 'waiting');
   }
@@ -58,6 +65,7 @@ export class LoginComponent implements OnInit {
         ]),
       ],
       email: ['', Validators.compose([Validators.required, Validators.email])],
+      otp: ['', Validators.compose([Validators.required])],
       password: [
         '',
         Validators.compose([Validators.required, Validators.minLength(8)]),
@@ -137,6 +145,101 @@ export class LoginComponent implements OnInit {
     this.loginForm?.reset();
   }
 
+  onEmailInsert(event:any) {
+    const data = {
+      email: event.target.value
+    }
+    console.log(data)
+    //console.log(data.VoterID)
+    this.databaseService.checkEmail(data).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.emailcheck = false;
+        if(this.registerForm.get('email')?.valid) {
+          console.log('NO ERROR')
+          this.enablesendotp =true;
+        }
+        else {
+          this.enablesendotp =false;
+
+        }
+      },
+      error: (error: any) => {
+        this.emailcheck = true
+        this.enablesendotp =false;
+      }
+    });
+  }
+
+  verify() {
+    const data = {
+      email: this.registerForm.value.email
+    }
+    console.log(data)
+    //console.log(data.VoterID)
+    this.databaseService.verifyEmail(data).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.sb.open('OTP sent', '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+        this.otpfield=true;
+      },
+      error: (error: any) => {
+        this.otpfield=false;
+        this.sb.open('Some error occurred '+ error, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+      }
+    });
+  }
+
+  confirmOtp() {
+    const encotp = sha256(this.registerForm.value.otp)
+    const encotp1 = encotp.toString(enc.Hex)
+    console.log("OTP to be sent is "+encotp1)
+    const data = {
+      otp: encotp1
+    }
+    //console.log(data)
+    //console.log(data.VoterID)
+    this.databaseService.verifyOtp(data).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.sb.open('OTP Verified', '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+        this.registerEnable=true;
+        this.otpfield=false;
+        this.otpverified=true;
+        this.registerForm.get('email')?.disable();
+      },
+      error: (error: any) => {
+        if(error.error.message==="Invalid OTP")
+        {
+          this.sb.open('Entered OTP is incorrect', '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 5000
+          });
+        } else {
+        this.sb.open('Some error occurred '+ error, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+      }
+        this.registerEnable=false;
+      }
+    });
+  }
+
   onRegister() {
     /*
     this.registerForm?.reset();
@@ -147,6 +250,7 @@ export class LoginComponent implements OnInit {
       verticalPosition: 'top',
       duration: 5000
     }); */
+    this.registerForm.get('email')?.enable();
     let pwd = sha256(sha1(this.registerForm.value.userid + this.registerForm.value.password).toString()).toString();
     this.registerForm.value.password=pwd;
     const data = {
@@ -156,6 +260,7 @@ export class LoginComponent implements OnInit {
       Password: this.registerForm.value.password
     };
     //console.log(data.Email)
+    this.registerForm.get('email')?.disable();
     this.databaseService.add(data).subscribe({
       next: (response: any) => {
         console.log(response);
