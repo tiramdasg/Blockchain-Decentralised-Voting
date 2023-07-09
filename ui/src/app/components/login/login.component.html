@@ -113,7 +113,7 @@
 
                             <div class="d-grid">
                                 <button mat-raised-button class="btn btn-lg btn-login fw-bold mb-2" type="submit"
-                                    [disabled]="registerForm.invalid && !registerEnable">Register</button>
+                                    [disabled]="registerForm.invalid || !registerEnable">Register</button>
                                 <!-- <div class="text-center">
                                         <a class="small" href="#">Forgot password?</a>
                                 </div> -->
