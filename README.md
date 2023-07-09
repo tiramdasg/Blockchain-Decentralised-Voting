@@ -45,7 +45,7 @@ We have uploaded the docker images to the Google Container Repository (gcr) whic
 To run those images on the local repository the commands will be:
 
 ```bash
- docker run gcr.io/tuhh-aic/db
- docker run gcr.io/tuhh-aic/frontend
- docker run gcr.io/tuhh-aic/backend
+ docker run -d gcr.io/tuhh-aic/db
+ docker run -d  gcr.io/tuhh-aic/frontend
+ docker run -d  gcr.io/tuhh-aic/backend
 ```
