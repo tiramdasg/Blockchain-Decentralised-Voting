@@ -4,7 +4,7 @@ A decentralised voting system using blockchain smart contracts. Part of the Proj
 
 # To deploy from Git
 
-Markup :  # Development Mode #
+**Development Mode**
 
 While in development mode use the following commands:
 ```bash
@@ -14,7 +14,7 @@ cd ../ui
 ng s --port 80 (sudo if required)
 ```
 
-Markup :  # Production Mode #
+**Production Mode**
 
 For **docker** (production mode) use the following command in the root folder:
 ```bash
