@@ -23,11 +23,9 @@ docker-compose up
 and specify admin credentials when asked
 
 *username*: 12345
-
 *password*: admin
 
 For **cloud** the URL is:
-
 [http://35.194.18.200/](http://35.194.18.200/ "Decentralised Voting System") 
 
 # Docker Image on GCR
