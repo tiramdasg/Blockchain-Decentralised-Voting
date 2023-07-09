@@ -40,12 +40,10 @@ export class AdminApproveComponent implements OnInit {
           this.voters_to_be_approved.pop();
         }
         else {
-          console.log(response);
           this.voters_to_be_approved = response;
         }
       },
       error: (error: any) => {
-        console.log(error.error.message);
         this.sb.open(error.error.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -56,7 +54,6 @@ export class AdminApproveComponent implements OnInit {
   }
 
   approveVoter(user: any) {
-    // console.log(user)
     const data = {
       userId: this.apiservice.getVoterId(),
       handleId: "approvevoter",
@@ -64,7 +61,6 @@ export class AdminApproveComponent implements OnInit {
     }
     this.databaseService.admin(data).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.sb.open(response.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -73,7 +69,6 @@ export class AdminApproveComponent implements OnInit {
         this.ngOnInit()
       },
       error: (error: any) => {
-        console.log(error.error.message);
         this.sb.open(error.error.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',

@@ -21,15 +21,12 @@ export class AdminGetResultsComponent implements OnInit {
       userId: this.apiservice.getVoterId(),
       handleId: "checkresult"
     }
-    console.log("Data: " + data.userId)
     this.databaseService.admin(data).subscribe({
       next: (response: any) => {
-        console.log("Result got is:" + response.message)
         x = response.message;
   
         this.databaseService.getAllCandidates().subscribe({
           next: (response: any) => {
-            console.log(response.message);
             this.candidates = [];
             const candidatesLength = response.message[0].length;
             for (var i = 0; i < candidatesLength; i++) {
@@ -39,12 +36,10 @@ export class AdminGetResultsComponent implements OnInit {
                 'candidateText': response.message[2][i],
                 'candidateVotes': x[i]
               };
-              console.log(dummy)
               this.candidates.push(dummy);
             }
           },
           error: (error: any) => {
-            console.log(error.error.message);
             this.sb.open(error.error.message, '', {
               horizontalPosition: 'center',
               verticalPosition: 'top',
@@ -54,7 +49,6 @@ export class AdminGetResultsComponent implements OnInit {
         });
       },
       error: (error: any) => {
-        console.log(error.error.message);
         this.sb.open(error.error.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',

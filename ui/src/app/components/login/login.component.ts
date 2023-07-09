@@ -99,11 +99,8 @@ export class LoginComponent implements OnInit {
       VoterID: this.loginForm.value.loginId,
       Password: this.loginForm.value.password
     }
-    console.log(data)
-    //console.log(data.VoterID)
     this.databaseService.checkcredentials(data).subscribe({
       next: (response: any) => {
-        console.log(response);
         if (response.isAdmin == 0 && response.isAprroved == 1) {
           this.apiservice.setVoterId(response.VoterID)
           this.router.navigate(['/vote']);
@@ -134,7 +131,6 @@ export class LoginComponent implements OnInit {
         }
       },
       error: (error: any) => {
-        console.log(error.error.message);
           this.sb.open(error.error.message, '', {
             horizontalPosition: 'center',
             verticalPosition: 'top',
@@ -149,14 +145,10 @@ export class LoginComponent implements OnInit {
     const data = {
       email: event.target.value
     }
-    console.log(data)
-    //console.log(data.VoterID)
     this.databaseService.checkEmail(data).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.emailcheck = false;
         if(this.registerForm.get('email')?.valid) {
-          console.log('NO ERROR')
           this.enablesendotp =true;
         }
         else {
@@ -175,11 +167,8 @@ export class LoginComponent implements OnInit {
     const data = {
       email: this.registerForm.value.email
     }
-    console.log(data)
-    //console.log(data.VoterID)
     this.databaseService.verifyEmail(data).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.sb.open('OTP sent', '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -201,15 +190,11 @@ export class LoginComponent implements OnInit {
   confirmOtp() {
     const encotp = sha256(this.registerForm.value.otp)
     const encotp1 = encotp.toString(enc.Hex)
-    console.log("OTP to be sent is "+encotp1)
     const data = {
       otp: encotp1
     }
-    //console.log(data)
-    //console.log(data.VoterID)
     this.databaseService.verifyOtp(data).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.sb.open('OTP Verified', '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -259,11 +244,9 @@ export class LoginComponent implements OnInit {
       Email: this.registerForm.value.email,
       Password: this.registerForm.value.password
     };
-    //console.log(data.Email)
     this.registerForm.get('email')?.disable();
     this.databaseService.add(data).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.registerForm?.reset();
         this.sb.open('Registered! Wait for the Admin to approve!', '', {
           horizontalPosition: 'center',
@@ -273,7 +256,6 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('role', 'waiting');
       },
       error: (error: any) => {
-        console.log(error.error.message);
         this.sb.open(error.error.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',

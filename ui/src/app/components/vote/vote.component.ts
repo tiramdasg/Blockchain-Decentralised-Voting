@@ -43,7 +43,6 @@ export class VoteComponent implements OnInit ,OnDestroy {
   constructor(private apiservice: ApiService,
     private databaseService: DbnodeService,
     private sb: MatSnackBar) {
-    //console.log(this.apiservice.getVoterId())
 
   }
 
@@ -51,7 +50,6 @@ export class VoteComponent implements OnInit ,OnDestroy {
     CANDIDATE_LIST.splice(0, CANDIDATE_LIST.length);
     this.databaseService.getAllCandidates().subscribe({
       next: (response: any) => {
-        console.log(response.message);
         this.candidatesfrombackend = response.message;
         for (var i = 0; i < response.message[0].length; i++) {
 /*           CANDIDATE_LIST[i].candidateName = response.message[0][i];
@@ -65,11 +63,9 @@ export class VoteComponent implements OnInit ,OnDestroy {
           };
           CANDIDATE_LIST.push(newCandidate);
         }
-        console.log(CANDIDATE_LIST)
         this.dataSource = new MatTableDataSource<CandidateInfo>(CANDIDATE_LIST);
       },
       error: (error: any) => {
-        console.log(error.error.message);
         this.sb.open(error.error.message, '', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -108,10 +104,8 @@ export class VoteComponent implements OnInit ,OnDestroy {
       VoterID: this.apiservice.getVoterId(),
       candidate_index: y
     }
-    console.log(data.candidate_index);
     this.databaseService.vote(data).subscribe({
       next: (response: any) => {
-        console.log(response.message);
         if (response.message.includes("Invalid"))
           response.message = "Already Voted";
         else
@@ -123,7 +117,6 @@ export class VoteComponent implements OnInit ,OnDestroy {
         });
       },
       error: (error: any) => {
-        console.log(error.error.message);
         if (error.error.message.includes("revert"))
           error.error.message = "Already Voted";
         this.sb.open(error.error.message, '', {
