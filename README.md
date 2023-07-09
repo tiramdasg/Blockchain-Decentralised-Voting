@@ -39,13 +39,13 @@ We have uploaded the docker images to the Google Container Repository (gcr) whic
 ```bash
  docker pull gcr.io/tuhh-aic/db
  docker pull gcr.io/tuhh-aic/frontend
- docker pull gcr.io/tuhh-aic/backend.
+ docker pull gcr.io/tuhh-aic/backend
 ```
 
 To run those images on the local repository the commands will be:
 
 ```bash
  docker run gcr.io/tuhh-aic/db
- docker run gcr.io/tuhh-aic/backend
  docker run gcr.io/tuhh-aic/frontend
+ docker run gcr.io/tuhh-aic/backend
 ```
