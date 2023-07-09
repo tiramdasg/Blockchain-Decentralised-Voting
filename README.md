@@ -26,3 +26,18 @@ and specify admin credentials when asked
 
 For **cloud** the URL is:
 [http://35.194.18.200/](http://35.194.18.200/ "Decentralised Voting System") 
+
+# Docker Image on GCR
+
+We have uploaded the docker images to the Google Container Repository (gcr) which are made public and the commands to pull them are as follows:
+```bash
+ docker pull gcr.io/tuhh-aic/db
+ docker pull gcr.io/tuhh-aic/frontend
+ docker pull gcr.io/tuhh-aic/backend.
+```
+To run those images on the local repository the commands will be:
+```bash
+ docker run gcr.io/tuhh-aic/db
+ docker run gcr.io/tuhh-aic/backend
+ docker run gcr.io/tuhh-aic/frontend
+```
