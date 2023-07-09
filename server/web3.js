@@ -92,16 +92,7 @@ async function vote(candidateIndex, account) {
   const accountList = await getAccountList();
   const account11 = account;
   console.log(account11)
-if (accounts.includes(account11)) {
-const account = web3.eth.accounts.create();
-  // add the account to the wallet
-  web3.eth.accounts.wallet.add(account.privateKey);
-  // create a transaction
-  const transaction = {
-    to: defaultAccount,
-    value: '1000000000000000',
-    gas: 2000000
-  };
+  if (accounts.includes(account11)) {
     const voteTx = await contract.methods.vote(candidateIndex).send({ from: account11, gas: '3000000' });
     const signedTransaction = await web3.eth.accounts.signTransaction(transaction, account.privateKey);
     console.log('Vote transaction hash:', voteTx.transactionHash);
