@@ -13,9 +13,11 @@
       <li *ngIf="admin">
         <a routerLink="/admin-set-campaign">Setup Campaign</a>
       </li>
-      <!-- <li *ngIf="admin">
-        <a routerLink="/admin-get-results">Get Results</a>
-      </li> -->
+      <li style="margin-left: auto;" *ngIf="admin || user"> 
+        <a routerLink="/login-register">
+          <span><img width="30" alt="logout" src="../../../assets/logout.png"/>Logout</span>
+        </a>
+      </li>
     </ul>
   </nav>
 </header>
