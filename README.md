@@ -1,4 +1,4 @@
-# Project_A5 - Advanced Internet Computing - Blockchain Based Decentralized Voting System
+# Blockchain Based Decentralized Voting System
 
 A decentralised voting system using blockchain smart contracts. Part of the Project Based Learning module of the Advanced Internet Computing course at the TUHH, SoSe, 2023.
 
